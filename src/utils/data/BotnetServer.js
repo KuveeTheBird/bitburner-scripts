@@ -1,5 +1,5 @@
 import {calculateThreadCount} from "/utils/functions/calculateThreadCount";
-import * as CONSTANTS from '/utils/data/Constants';
+import * as CONSTANTS from '/constants/BatchAttack';
 
 export class BotnetServer {
     /** @param {import(".").NS } #ns */

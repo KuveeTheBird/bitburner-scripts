@@ -1,6 +1,6 @@
 import {BotnetServer} from "/utils/data/BotnetServer";
 import BotnetServerCollection from "/utils/data/Collections/BotnetServerCollection";
-import {TICK} from "/utils/data/Constants";
+import {TICK} from "/constants/BatchAttack";
 
 /** @param {NS} ns
  * @return BotnetServerCollection

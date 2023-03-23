@@ -16,7 +16,7 @@ export async function main(ns) {
 
     for (target of targets) {
         let targetServer = new Server(ns, target);
-        if (targetServer.hackable && targetServer.hasRootAccess) {
+        if (targetServer.hackable && targetServer.canHaveMoney && targetServer.hasRootAccess) {
             break;
         }
     }

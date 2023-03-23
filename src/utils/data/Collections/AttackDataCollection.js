@@ -1,6 +1,6 @@
 import ProcessData from "/utils/data/ProcessData";
 import {AttackData} from "/utils/data/AttackData";
-import {ATTACK_TYPE_PREPARE_WEAKEN} from "/utils/data/Constants";
+import {ATTACK_TYPE_PREPARE_WEAKEN} from "/constants/BatchAttack";
 import {restartTries} from "concurrently/dist/src/defaults";
 
 export default class AttackDataCollection {

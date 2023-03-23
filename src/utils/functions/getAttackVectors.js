@@ -5,9 +5,9 @@ import {
     ATTACK_TYPE_HACK,
     ATTACK_TYPE_PREPARE_GROW,
     ATTACK_TYPE_PREPARE_WEAKEN, ATTACK_TYPE_WEAKEN
-} from "/utils/data/Constants";
-import * as CONSTANTS from "/utils/data/Constants";
-import {TIME_BETWEEN_ATTACK_PHASES} from "/utils/data/Settings";
+} from "/constants/BatchAttack";
+import * as CONSTANTS from "/constants/BatchAttack";
+import {TIME_BETWEEN_ATTACK_PHASES} from "/settings/Settings";
 import {AttackableServer} from "/utils/data/AttackableServer";
 
 /**

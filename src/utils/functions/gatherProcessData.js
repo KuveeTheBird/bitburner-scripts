@@ -1,6 +1,6 @@
 import BotnetServerCollection from "/utils/data/Collections/BotnetServerCollection";
 import ProcessData from "/utils/data/ProcessData";
-import {SNIPPETS} from "/utils/data/Constants";
+import {SNIPPETS} from "/constants/BatchAttack";
 
 /**
  * @param {NS} ns

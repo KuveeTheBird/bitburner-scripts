@@ -11,7 +11,7 @@ import {
     SNIPPET_PATH_WAIT_HACK,
     SNIPPET_PATH_WAIT_WEAKEN,
     SNIPPET_PATH_WEAKEN
-} from "/utils/data/Constants";
+} from "/constants/BatchAttack";
 
 export default class BotnetServerCollection {
     /** @param {import(".").NS } #ns */

@@ -1,5 +1,5 @@
-import {ATTACK_TYPES, TICK} from "/utils/data/Constants";
-import {TIME_BETWEEN_ATTACK_PHASES} from "/utils/data/Settings";
+import {ATTACK_TYPES, TICK} from "/constants/BatchAttack";
+import {TIME_BETWEEN_ATTACK_PHASES} from "/settings/Settings";
 
 export class ScriptTiming {
     /**

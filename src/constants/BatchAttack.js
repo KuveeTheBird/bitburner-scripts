@@ -1,5 +1,8 @@
-export const TICK = 20;
 
+//////////////////////////
+//BATCH ATTACK CONSTANTS//
+//////////////////////////
+export const TICK = 20;
 export const SNIPPET_RAM_COST = 1.75;
 // export const SNIPPET_RAM_COST = 2.05;
 export const SNIPPET_PREFIX_WAIT = 'wait';

@@ -7,10 +7,10 @@ import {
     DISPATCHER_TIME_INTERVAL,
     MIN_TIME_BETWEEN_ATTACKS_START,
     TIME_BETWEEN_ATTACK_PHASES
-} from "/utils/data/Settings";
+} from "/settings/Settings";
 import {AttackableServer} from "/utils/data/AttackableServer";
 import {ScriptTiming} from "/utils/data/ScriptTiming";
-import {ATTACK_TYPE_GROW, ATTACK_TYPE_HACK, ATTACK_TYPE_WEAKEN, TICK} from "/utils/data/Constants";
+import {ATTACK_TYPE_GROW, ATTACK_TYPE_HACK, ATTACK_TYPE_WEAKEN, TICK} from "/constants/BatchAttack";
 import ScriptTimingCollection from "/utils/data/Collections/ScriptTimingCollection";
 
 function calculateHackThreads(attackableServer, hackRatio) {

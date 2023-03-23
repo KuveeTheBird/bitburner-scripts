@@ -1,6 +1,6 @@
 import {AttackableServer} from "/utils/data/AttackableServer";
 import BotnetServerCollection from "/utils/data/Collections/BotnetServerCollection";
-import {ATTACK_TYPES} from "/utils/data/Constants";
+import {ATTACK_TYPES} from "/constants/BatchAttack";
 
 export class AttackData {
     /** @type {import(".").NS } #ns */

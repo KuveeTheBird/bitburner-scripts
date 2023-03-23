@@ -1,5 +1,5 @@
 import {AttackableServer} from "/utils/data/AttackableServer";
-import {WEAKEN_TIME_CUTOFF} from "/utils/data/Settings";
+import {WEAKEN_TIME_CUTOFF} from "/settings/Settings";
 
 /** @param {NS} ns
  * @return AttackableServer[]

@@ -1,5 +1,5 @@
 import {Character} from '/utils/data/Character.js';
-import * as CONSTANTS from '/utils/data/Constants';
+import * as CONSTANTS from '/constants/BatchAttack';
 
 export class Server {
 
@@ -102,9 +102,9 @@ export class Server {
         return this.#ns.getWeakenTime(this.name);
     }
 
-    // get serverDetails() {
-    //     return this.#ns.getServer(this.name);
-    // }
+    get serverDetails() {
+        return this.#ns.getServer(this.name);
+    }
 
     /////////////////////
     //MY CUSTOM GETTERS//
@@ -114,8 +114,8 @@ export class Server {
     }
 
     get backdoorInstalled() {
-        // return this.serverDetails.backdoorInstalled;
-        return false;
+        return this.serverDetails.backdoorInstalled;
+        // return false;
     }
 
     get neighbours() {
@@ -123,7 +123,11 @@ export class Server {
     }
 
     get hackable() {
-        return (this.requiredHackingLevel <= this.character.hackingLevel) && (this.maxMoney > 0);
+        return (this.requiredHackingLevel <= this.character.hackingLevel);
+    }
+
+    get canHaveMoney() {
+        return this.maxMoney > 0;
     }
 
     get flatChildren() {
@@ -154,7 +158,7 @@ export class Server {
     get hackableChildren() {
         let hackableChildren = [];
 
-        if (this.hackable) {
+        if (this.hackable && this.canHaveMoney) {
             hackableChildren.push(this)
         }
 
@@ -215,12 +219,20 @@ export class Server {
         }
 
         if (typeof type === 'undefined') {
+            let constName = this.name.toUpperCase().replaceAll('-', '_');
+
             this.#ns.tprintf(
-                '[%s]%s%s',
-                this.hasRootAccess ? '+' : '-',
-                '-'.repeat(depth),
+                'export const SERVER_NAME_%s = \'%s\'',
+                constName,
                 this.name
             );
+
+            // this.#ns.tprintf(
+            //     '[%s]%s%s',
+            //     this.hasRootAccess ? '+' : '-',
+            //     '-'.repeat(depth),
+            //     this.name
+            // );
         } else if (type === 'backdoor') {
             this.#ns.tprintf(
                 '[%s]%s%s - %s',

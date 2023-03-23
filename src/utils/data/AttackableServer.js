@@ -1,5 +1,5 @@
 import {Character} from "/utils/data/Character";
-import * as CONSTANTS from "/utils/data/Constants";
+import * as CONSTANTS from "/constants/BatchAttack";
 
 export class AttackableServer {
     /** @param {import(".").NS } #ns */

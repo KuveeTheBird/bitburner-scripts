@@ -1,5 +1,5 @@
 import {ScriptTiming} from "/utils/data/ScriptTiming";
-import {TICK} from "/utils/data/Constants";
+import {TICK} from "/constants/BatchAttack";
 
 export default class ScriptTimingCollection {
     /** @param {import(".").NS } #ns */
