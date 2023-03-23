@@ -1,6 +1,6 @@
 import {gatherBotnetServers} from "/utils/functions/gatherBotnetServers";
 import {gatherAttackableServers} from "/utils/functions/gatherAttackableServers";
-import {calculateAttackParams, getAttackVectors} from "/utils/functions/getAttackVectors";
+import {getAttackVectors} from "/utils/functions/getAttackVectors";
 import {getUnpreparedAttackableServers} from "/utils/functions/getUnpreparedAttackableServers";
 import {gatherAttackData} from "/utils/functions/gatherAttackData";
 import {
@@ -186,33 +186,4 @@ async function waitUntilScriptsDontConflict(ns, attackableServer, scriptTimingCo
         }
         break
     }
-}
-
-/** @param {NS} ns
- * @param {ScriptTimingCollection} scriptTimingCollection
- */
-function debug(ns, scriptTimingCollection) {
-    let timings = [];
-    scriptTimingCollection.reset();
-    while (scriptTimingCollection.hasNext()) {
-
-
-        let scriptTiming = scriptTimingCollection.getNext();
-        let conflictStartDateTime = new Date(scriptTiming.previous.attackEndTime);
-        let conflictEndDateTime = new Date(scriptTiming.attackEndTime);
-        let timing = {
-            'conflictStartTime': scriptTiming.previous.attackEndTime,
-            'conflictEndTime': scriptTiming.attackEndTime,
-
-            'conflictStartDateTime': conflictStartDateTime.toString(),
-            'conflictEndDateTime': conflictEndDateTime.toString(),
-
-            'conflictDuration': scriptTiming.attackEndTime - scriptTiming.previous.attackEndTime,
-        };
-
-        timings.push(timing);
-    }
-    ns.tprint(JSON.stringify(timings, undefined, 2));
-
-    ns.exit();
 }

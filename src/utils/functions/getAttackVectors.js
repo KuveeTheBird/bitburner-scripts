@@ -1,5 +1,3 @@
-import {getBotnetThreadCapacity} from "/utils/functions/getBotnetThreadCapacity";
-import {gatherBotnetServers} from "/utils/functions/gatherBotnetServers";
 import {gatherAttackableServers} from "/utils/functions/gatherAttackableServers";
 import {gatherAttackData} from "/utils/functions/gatherAttackData";
 import {

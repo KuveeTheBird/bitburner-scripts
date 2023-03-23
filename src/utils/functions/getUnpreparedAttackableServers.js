@@ -3,7 +3,6 @@ import {getBotnetThreadCapacity} from "/utils/functions/getBotnetThreadCapacity"
 /**
  * @param {NS} ns
  * @param {AttackableServer[]} attackableServers
- * @param {string[]} attackInProgress
  * @return AttackableServer[]
  */
 export function getUnpreparedAttackableServers(ns, attackableServers) {
