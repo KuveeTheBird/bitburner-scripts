@@ -1,5 +1,7 @@
 import {calculateThreadCount} from "/utils/functions/calculateThreadCount";
 import * as CONSTANTS from '/constants/BatchAttack';
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
+import {FILENAME_GRACEFUL_KILL} from "/constants/Misc";
 
 export class BotnetServer {
     /** @param {import(".").NS } #ns */
@@ -12,11 +14,14 @@ export class BotnetServer {
 
     reservedRam = 0;
 
+    /** @param {import(".").NS } ns
+     * @param {string} name
+     */
     constructor(ns, name) {
         this.#ns = ns;
         this.name = name;
 
-        if (this.name === 'home') {
+        if (this.name === SERVER_NAME_HOME) {
             this.reservedRam = 32;
         }
 
@@ -28,15 +33,27 @@ export class BotnetServer {
     }
 
     get maxRam() {
-        return this.#ns.getServerMaxRam(this.name);
+        let serverMaxRam = this.#ns.getServerMaxRam(this.name);
+        if (this.isBeingGracefullyKilled) {
+            return 0;
+        }
+        return serverMaxRam;
     }
 
     get usedRam() {
-        return this.#ns.getServerUsedRam(this.name);
+        const usedRam = this.#ns.getServerUsedRam(this.name);
+        if (this.isBeingGracefullyKilled) {
+            return 0;
+        }
+        return usedRam;
     }
 
     get availableRam() {
-        return this.maxRam - this.usedRam - this.reservedRam;
+        let availableRam = this.maxRam - this.usedRam - this.reservedRam;
+        if (this.isBeingGracefullyKilled) {
+            return 0;
+        }
+        return availableRam;
     }
 
     get maxThreadCapacity() {
@@ -45,6 +62,10 @@ export class BotnetServer {
 
     get currentThreadCapacity() {
         return calculateThreadCount(this.availableRam, CONSTANTS.SNIPPET_RAM_COST);
+    }
+
+    get isBeingGracefullyKilled() {
+        return this.#ns.getServer(this.name).purchasedByPlayer && this.#ns.fileExists(FILENAME_GRACEFUL_KILL, this.name);
     }
 
     weakenTarget(attackableServer, threads) {
@@ -72,7 +93,7 @@ export class BotnetServer {
     }
 
     scp(fileName) {
-        this.#ns.scp(fileName, this.name, 'home');
+        this.#ns.scp(fileName, this.name, SERVER_NAME_HOME);
     }
 
     installSnippets() {

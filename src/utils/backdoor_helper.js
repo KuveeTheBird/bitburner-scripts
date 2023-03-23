@@ -25,13 +25,15 @@ export async function main(ns) {
         let flatArray = [];
 
         gatherAncestry(homeServer, targetServer.name, flatArray);
+        flatArray.shift();
 
         ns.tprintf('------------------------');
+        ns.tprintf(SERVER_NAME_HOME);
         for (let server of flatArray) {
             ns.tprintf('connect %s;', server);
         }
         ns.tprintf('backdoor');
-        ns.tprintf('home');
+        ns.tprintf(SERVER_NAME_HOME);
         ns.tprintf('------------------------');
 
     }

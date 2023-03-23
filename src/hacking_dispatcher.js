@@ -1,4 +1,5 @@
 import {Server} from '/utils/data/Server.js';
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -21,11 +22,11 @@ export async function main(ns) {
         }
     }
 
-    const homeServer = new Server(ns, 'home');
+    const homeServer = new Server(ns, SERVER_NAME_HOME);
     const rootServers = homeServer.flatRootChildren;
 
     for (let rootServer of rootServers) {
-        if (rootServer.name === 'home') {
+        if (rootServer.name === SERVER_NAME_HOME) {
             continue;
         }
 

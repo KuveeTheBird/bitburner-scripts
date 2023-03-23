@@ -1,16 +1,16 @@
 import {AttackableServer} from "/utils/data/AttackableServer";
 import {WEAKEN_TIME_CUTOFF} from "/settings/Settings";
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
 
 /** @param {NS} ns
  * @return AttackableServer[]
  */
 export function gatherAttackableServers(ns) {
-    const home = 'home';
 
-    let scannedServers = [home];
+    let scannedServers = [SERVER_NAME_HOME];
     let attackableServers = [];
 
-    scanServers(ns, scannedServers, attackableServers, home);
+    scanServers(ns, scannedServers, attackableServers, SERVER_NAME_HOME);
 
     if (!attackableServers.length) {
         attackableServers.push(new AttackableServer(ns, 'n00dles'));

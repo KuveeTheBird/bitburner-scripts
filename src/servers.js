@@ -1,9 +1,11 @@
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
+
 /** @param {NS} ns */
 export async function main(ns) {
     const ram = 1024;
     let i = 0;
     while (i < ns.getPurchasedServerLimit()) {
-        if (ns.getServerMoneyAvailable("home") > ns.getPurchasedServerCost(ram)) {
+        if (ns.getServerMoneyAvailable(SERVER_NAME_HOME) > ns.getPurchasedServerCost(ram)) {
             //let hostname = ns.purchaseServer("pserv-" + i, ram);
             ns.purchaseServer("pserv-" + i, ram);
             ++i;

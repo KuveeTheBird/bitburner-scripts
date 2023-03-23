@@ -1,3 +1,5 @@
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
+
 export class Character {
     /** @param {import(".").NS } #ns */
     #ns;
@@ -11,25 +13,25 @@ export class Character {
     }
 
     get homeFreeRam() {
-        return this.#ns.getServerMaxRam("home");
+        return this.#ns.getServerMaxRam(SERVER_NAME_HOME);
     }
 
     get numberOfPortOpeners() {
         let canHackThisManyPorts = 0;
 
-        if (this.#ns.fileExists("BruteSSH.exe", 'home')) {
+        if (this.#ns.fileExists("BruteSSH.exe", SERVER_NAME_HOME)) {
             canHackThisManyPorts++;
         }
-        if (this.#ns.fileExists("FTPCrack.exe", 'home')) {
+        if (this.#ns.fileExists("FTPCrack.exe", SERVER_NAME_HOME)) {
             canHackThisManyPorts++;
         }
-        if (this.#ns.fileExists("relaySMTP.exe", 'home')) {
+        if (this.#ns.fileExists("relaySMTP.exe", SERVER_NAME_HOME)) {
             canHackThisManyPorts++;
         }
-        if (this.#ns.fileExists("HTTPWorm.exe", 'home')) {
+        if (this.#ns.fileExists("HTTPWorm.exe", SERVER_NAME_HOME)) {
             canHackThisManyPorts++;
         }
-        if (this.#ns.fileExists("SQLInject.exe", 'home')) {
+        if (this.#ns.fileExists("SQLInject.exe", SERVER_NAME_HOME)) {
             canHackThisManyPorts++;
         }
 

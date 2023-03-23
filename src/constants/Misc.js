@@ -1,0 +1,1 @@
+export const FILENAME_GRACEFUL_KILL = 'kill.txt';

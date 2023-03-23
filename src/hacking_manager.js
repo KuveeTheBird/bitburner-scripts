@@ -42,8 +42,10 @@ export async function main(ns) {
 
             let hackRatio = mainAttackVector.hackRatio;
             while (true) {
+                botnetServerCollection = await gatherBotnetServers(ns);
                 while (botnetServerCollection.getAvailableAttackThreads() < mainAttackVector.totalThreads) {
                     await ns.asleep(TIME_BETWEEN_ATTACK_PHASES);
+                    botnetServerCollection = await gatherBotnetServers(ns);
                 }
 
                 let timeBetweenAttacksStart = mainAttackVector.timeBetweenAttacksStart;

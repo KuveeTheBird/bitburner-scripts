@@ -1,18 +1,16 @@
 import {BotnetServer} from "/utils/data/BotnetServer";
 import BotnetServerCollection from "/utils/data/Collections/BotnetServerCollection";
-import {TICK} from "/constants/BatchAttack";
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
 
 /** @param {NS} ns
  * @return BotnetServerCollection
  */
 export async function gatherBotnetServers(ns) {
-    const home = 'home';
-
-    let scannedServers = [home];
+    let scannedServers = [SERVER_NAME_HOME];
     let botnetServers = new BotnetServerCollection(ns);
-    botnetServers.addByName(home);
+    botnetServers.addByName(SERVER_NAME_HOME);
 
-    scanServers(ns, scannedServers, botnetServers, home);
+    scanServers(ns, scannedServers, botnetServers, SERVER_NAME_HOME);
 
     botnetServers.sortByDesc('maxThreadCapacity');
 

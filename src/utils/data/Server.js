@@ -1,5 +1,6 @@
 import {Character} from '/utils/data/Character.js';
 import * as CONSTANTS from '/constants/BatchAttack';
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
 
 export class Server {
 
@@ -38,7 +39,7 @@ export class Server {
             this.character = character;
         }
 
-        if (this.name === 'home') {
+        if (this.name === SERVER_NAME_HOME) {
             this.reservedRam = 32;
         }
 
@@ -270,19 +271,19 @@ export class Server {
             return;
         }
 
-        if (this.#ns.fileExists("BruteSSH.exe", 'home')) {
+        if (this.#ns.fileExists("BruteSSH.exe", SERVER_NAME_HOME)) {
             this.#ns.brutessh(this.name);
         }
-        if (this.#ns.fileExists("FTPCrack.exe", 'home')) {
+        if (this.#ns.fileExists("FTPCrack.exe", SERVER_NAME_HOME)) {
             this.#ns.ftpcrack(this.name);
         }
-        if (this.#ns.fileExists("relaySMTP.exe", 'home')) {
+        if (this.#ns.fileExists("relaySMTP.exe", SERVER_NAME_HOME)) {
             this.#ns.relaysmtp(this.name);
         }
-        if (this.#ns.fileExists("HTTPWorm.exe", 'home')) {
+        if (this.#ns.fileExists("HTTPWorm.exe", SERVER_NAME_HOME)) {
             this.#ns.httpworm(this.name);
         }
-        if (this.#ns.fileExists("SQLInject.exe", 'home')) {
+        if (this.#ns.fileExists("SQLInject.exe", SERVER_NAME_HOME)) {
             this.#ns.sqlinject(this.name);
         }
 
@@ -392,5 +393,7 @@ export class Server {
     debugSecurity() {
         this.#ns.tprintf('Security: %s', this.securityLevel);
     }
+
+
 
 }
