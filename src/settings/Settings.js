@@ -2,10 +2,11 @@ export const DISPATCHER_TIME_INTERVAL = 10000;
 export const WEAKEN_TIME_CUTOFF_BASE = 1*60*1000; //1*60*1000 = 1 Minute
 export const WEAKEN_TIME_CUTOFF_HACK_LEVEL_INCREMENTS = 100; //Every X hacking level cutoff time increases
 
-export const TIME_BETWEEN_ATTACK_PHASES = 500; //100ms should be okay
+export const TIME_BETWEEN_ATTACK_PHASES = 250; //100ms should be okay
 
 export const MIN_TIME_BETWEEN_ATTACKS_START = TIME_BETWEEN_ATTACK_PHASES * 5;
 
+export const PURCHASED_SERVERS_COST_SAFETY_ADJUSTMENT = 2;
 export const PURCHASED_SERVERS_HACKING_LEVEL_REQUIREMENTS = [
     {
         hackingLevel: 1,
@@ -40,7 +41,11 @@ export const PURCHASED_SERVERS_HACKING_LEVEL_REQUIREMENTS = [
         serverRam: 1024,
     },
     {
-        hackingLevel: 2000,
+        hackingLevel: 1500,
         serverRam: 2048,
+    },
+    {
+        hackingLevel: 2000,
+        serverRam: 4096,
     },
 ]

@@ -31,4 +31,16 @@ export class PurchasedServer {
     delete() {
         return this.#ns.deleteServer(this.name);
     }
+
+    get maxRam() {
+        return this.#ns.getServerMaxRam(this.name);
+    }
+
+    get usedRam() {
+        return this.#ns.getServerUsedRam(this.name);
+    }
+
+    get availableRam() {
+        return this.maxRam - this.usedRam - this.reservedRam;
+    }
 }

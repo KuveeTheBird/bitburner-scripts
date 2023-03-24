@@ -171,14 +171,6 @@ export class Server {
 
     }
 
-    get viability() {
-        return (this.hackAnalyze() * this.maxMoney) / (this.hackTime + this.weakenTime + this.growTime);
-    }
-
-    get value() {
-        return  ((this.maxMoney * 0.25) / this.growth) * this.growTime - 5 * this.weakenTime;
-    }
-
     get threadsToFullyWeaken() {
         return Math.ceil((this.securityLevel - this.minSecurityLevel) / CONSTANTS.WEAKEN_THREAD_SECURITY_DECREASE);
     }
@@ -220,20 +212,12 @@ export class Server {
         }
 
         if (typeof type === 'undefined') {
-            let constName = this.name.toUpperCase().replaceAll('-', '_');
-
             this.#ns.tprintf(
-                'export const SERVER_NAME_%s = \'%s\'',
-                constName,
+                '[%s]%s%s',
+                this.hasRootAccess ? '+' : '-',
+                '-'.repeat(depth),
                 this.name
             );
-
-            // this.#ns.tprintf(
-            //     '[%s]%s%s',
-            //     this.hasRootAccess ? '+' : '-',
-            //     '-'.repeat(depth),
-            //     this.name
-            // );
         } else if (type === 'backdoor') {
             this.#ns.tprintf(
                 '[%s]%s%s - %s',
@@ -389,11 +373,4 @@ export class Server {
             this.scp(snippet.path);
         }
     }
-
-    debugSecurity() {
-        this.#ns.tprintf('Security: %s', this.securityLevel);
-    }
-
-
-
 }
