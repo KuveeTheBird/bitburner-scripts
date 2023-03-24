@@ -6,7 +6,13 @@ import {gatherAttackData} from "/utils/functions/gatherAttackData";
 import {DISPATCHER_TIME_INTERVAL, MIN_TIME_BETWEEN_ATTACKS_START, TIME_BETWEEN_ATTACK_PHASES} from "/settings/Settings";
 import {AttackableServer} from "/utils/data/AttackableServer";
 import {ScriptTiming} from "/utils/data/ScriptTiming";
-import {ATTACK_TYPE_GROW, ATTACK_TYPE_HACK, ATTACK_TYPE_WEAKEN} from "/constants/BatchAttack";
+import {
+    ATTACK_TYPE_GROW,
+    ATTACK_TYPE_HACK,
+    ATTACK_TYPE_PREPARE_GROW,
+    ATTACK_TYPE_PREPARE_WEAKEN,
+    ATTACK_TYPE_WEAKEN
+} from "/constants/BatchAttack";
 import ScriptTimingCollection from "/utils/data/Collections/ScriptTimingCollection";
 
 function calculateHackThreads(attackableServer, hackRatio) {
@@ -60,6 +66,12 @@ async function prepareServers(ns) {
 
 /** @param {NS} ns */
 async function attackServers(ns) {
+    let attackDataCollection = gatherAttackData(ns, await gatherBotnetServers(ns));
+    if (attackDataCollection.getThreadsByAttackType([ATTACK_TYPE_PREPARE_GROW, ATTACK_TYPE_PREPARE_WEAKEN, ATTACK_TYPE_HACK, ATTACK_TYPE_GROW, ATTACK_TYPE_WEAKEN]) > 0) {
+        ns.printf('Won\'t start attacking until preparation is ongoing.');
+        return;
+    }
+
     let attackVectors = await getAttackVectors(ns);
 
     if (attackVectors.length > 0) {

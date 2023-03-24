@@ -1,12 +1,6 @@
 import {gatherAttackableServers} from "/utils/functions/gatherAttackableServers";
 import {gatherAttackData} from "/utils/functions/gatherAttackData";
-import {
-    ATTACK_TYPE_GROW,
-    ATTACK_TYPE_HACK,
-    ATTACK_TYPE_PREPARE_GROW,
-    ATTACK_TYPE_PREPARE_WEAKEN,
-    ATTACK_TYPE_WEAKEN
-} from "/constants/BatchAttack";
+import {ATTACK_TYPE_GROW, ATTACK_TYPE_HACK, ATTACK_TYPE_WEAKEN} from "/constants/BatchAttack";
 import {MIN_TIME_BETWEEN_ATTACKS_START} from "/settings/Settings";
 import {AttackableServer} from "/utils/data/AttackableServer";
 import {gatherBotnetServers} from "/utils/functions/gatherBotnetServers";
@@ -21,10 +15,6 @@ export async function getAttackVectors(ns) {
     let bestAttackParams = [];
 
     let attackDataCollection = gatherAttackData(ns, botnetServerCollection);
-    if (attackDataCollection.getThreadsByAttackType([ATTACK_TYPE_PREPARE_GROW, ATTACK_TYPE_PREPARE_WEAKEN, ATTACK_TYPE_HACK, ATTACK_TYPE_GROW, ATTACK_TYPE_WEAKEN]) > 0) {
-        ns.printf('Won\'t start attacking until preparation is ongoing.');
-        return bestAttackParams;
-    }
 
     let attackableServers = gatherAttackableServers(ns);
 
