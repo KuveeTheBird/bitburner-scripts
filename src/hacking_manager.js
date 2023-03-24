@@ -40,8 +40,16 @@ export async function main(ns) {
             ns.print('Starting batch attack:');
             ns.print(JSON.stringify(mainAttackVector, undefined, 2));
 
+            let runCount = 0;
+
             let hackRatio = mainAttackVector.hackRatio;
-            while (true) {
+            let maxRunCount = 100;
+            let hackingLevel = ns.getHackingLevel();
+            if (hackingLevel < 900) {
+                maxRunCount = 10 * Math.ceil(hackingLevel / 100);
+            }
+            while (runCount <= maxRunCount) {
+                runCount++;
                 botnetServerCollection = await gatherBotnetServers(ns);
                 while (botnetServerCollection.getAvailableAttackThreads() < mainAttackVector.totalThreads) {
                     await ns.asleep(TIME_BETWEEN_ATTACK_PHASES);

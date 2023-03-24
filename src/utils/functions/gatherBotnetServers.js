@@ -9,6 +9,10 @@ export async function gatherBotnetServers(ns) {
     let scannedServers = [SERVER_NAME_HOME];
     let botnetServers = new BotnetServerCollection(ns);
     botnetServers.addByName(SERVER_NAME_HOME);
+    ////////////////////////////////////////
+    //REMOVE AFTER BATCH CAPACITY HANDLING//
+    ////////////////////////////////////////
+    return botnetServers;
 
     scanServers(ns, scannedServers, botnetServers, SERVER_NAME_HOME);
 

@@ -1,7 +1,8 @@
 export const DISPATCHER_TIME_INTERVAL = 10000;
-export const WEAKEN_TIME_CUTOFF = 1*60*1000; //1*60*1000 = 1 Minute
+export const WEAKEN_TIME_CUTOFF_BASE = 1*60*1000; //1*60*1000 = 1 Minute
+export const WEAKEN_TIME_CUTOFF_HACK_LEVEL_INCREMENTS = 100; //Every X hacking level cutoff time increases
 
-export const TIME_BETWEEN_ATTACK_PHASES = 200; //100ms should be okay
+export const TIME_BETWEEN_ATTACK_PHASES = 500; //100ms should be okay
 
 export const MIN_TIME_BETWEEN_ATTACKS_START = TIME_BETWEEN_ATTACK_PHASES * 5;
 

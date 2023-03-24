@@ -49,11 +49,13 @@ export async function getAttackVectors(ns, botnetServerCollection) {
                 }
                 let secondsBetweenAttacksStart = timeBetweenAttacksStart/1000;
                 let moneyPerSec = attackParams.moneyPerBatch / secondsBetweenAttacksStart;
+                let moneyMillionPerSec = Math.round(moneyPerSec / 1000 / 1000) + 'm$';
 
                 attackParams['parralelAttacksCount'] = parralelAttacksCount;
                 attackParams['timeBetweenAttacksStart'] = timeBetweenAttacksStart;
                 attackParams['secondsBetweenAttacksStart'] = secondsBetweenAttacksStart;
                 attackParams['moneyPerSec'] = moneyPerSec;
+                attackParams['moneyMillionPerSec'] = moneyMillionPerSec;
 
                 if (typeof bestAttackParam === 'undefined' || moneyPerSec > bestAttackParam.moneyPerSec) {
                     bestAttackParam = attackParams;

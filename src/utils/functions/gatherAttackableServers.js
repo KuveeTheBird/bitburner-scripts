@@ -1,5 +1,5 @@
 import {AttackableServer} from "/utils/data/AttackableServer";
-import {WEAKEN_TIME_CUTOFF} from "/settings/Settings";
+import {WEAKEN_TIME_CUTOFF_BASE} from "/settings/Settings";
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
 
 /** @param {NS} ns
@@ -34,7 +34,10 @@ function scanServers(ns, scannedServers, attackableServers, hostname) {
         scannedServers.push(host);
 
         let attackableServer = new AttackableServer(ns, host);
-        if (attackableServer.hasRootAccess && attackableServer.hackable && attackableServer.weakenTime < WEAKEN_TIME_CUTOFF) {
+        let weakenTimeCutoff = WEAKEN_TIME_CUTOFF_BASE;
+        let hackLevelCutoffMultiplier = Math.floor(ns.getHackingLevel()/200);
+        hackLevelCutoffMultiplier = hackLevelCutoffMultiplier < 1 ? 0 : hackLevelCutoffMultiplier
+        if (attackableServer.hasRootAccess && attackableServer.hackable && attackableServer.weakenTime < (weakenTimeCutoff * hackLevelCutoffMultiplier)) {
             attackableServers.push(attackableServer);
         }
 

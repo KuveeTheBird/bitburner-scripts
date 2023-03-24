@@ -28,12 +28,11 @@ export async function main(ns) {
         flatArray.shift();
 
         ns.tprintf('------------------------');
-        ns.tprintf(SERVER_NAME_HOME);
+        ns.tprintf('%s;', SERVER_NAME_HOME);
         for (let server of flatArray) {
             ns.tprintf('connect %s;', server);
         }
         ns.tprintf('backdoor');
-        ns.tprintf(SERVER_NAME_HOME);
         ns.tprintf('------------------------');
 
     }
