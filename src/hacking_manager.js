@@ -3,14 +3,10 @@ import {gatherAttackableServers} from "/utils/functions/gatherAttackableServers"
 import {getAttackVectors} from "/utils/functions/getAttackVectors";
 import {getUnpreparedAttackableServers} from "/utils/functions/getUnpreparedAttackableServers";
 import {gatherAttackData} from "/utils/functions/gatherAttackData";
-import {
-    DISPATCHER_TIME_INTERVAL,
-    MIN_TIME_BETWEEN_ATTACKS_START,
-    TIME_BETWEEN_ATTACK_PHASES
-} from "/settings/Settings";
+import {DISPATCHER_TIME_INTERVAL, MIN_TIME_BETWEEN_ATTACKS_START, TIME_BETWEEN_ATTACK_PHASES} from "/settings/Settings";
 import {AttackableServer} from "/utils/data/AttackableServer";
 import {ScriptTiming} from "/utils/data/ScriptTiming";
-import {ATTACK_TYPE_GROW, ATTACK_TYPE_HACK, ATTACK_TYPE_WEAKEN, TICK} from "/constants/BatchAttack";
+import {ATTACK_TYPE_GROW, ATTACK_TYPE_HACK, ATTACK_TYPE_WEAKEN} from "/constants/BatchAttack";
 import ScriptTimingCollection from "/utils/data/Collections/ScriptTimingCollection";
 
 function calculateHackThreads(attackableServer, hackRatio) {
@@ -30,56 +26,8 @@ export async function main(ns) {
 
         await prepareServers(ns);
 
-        let botnetServerCollection = await gatherBotnetServers(ns);
-        let attackVectors = await getAttackVectors(ns, botnetServerCollection);
+        await attackServers(ns);
 
-        if (attackVectors.length > 0) {
-            let mainAttackVector = attackVectors[0];
-            let scriptTimingCollection = new ScriptTimingCollection(ns);
-            let attackableServer = new AttackableServer(ns, mainAttackVector.name);
-            ns.print('Starting batch attack:');
-            ns.print(JSON.stringify(mainAttackVector, undefined, 2));
-
-            let runCount = 0;
-
-            let hackRatio = mainAttackVector.hackRatio;
-            let maxRunCount = 100;
-            let hackingLevel = ns.getHackingLevel();
-            if (hackingLevel < 900) {
-                maxRunCount = 10 * Math.ceil(hackingLevel / 100);
-            }
-            while (runCount <= maxRunCount) {
-                runCount++;
-                botnetServerCollection = await gatherBotnetServers(ns);
-                while (botnetServerCollection.getAvailableAttackThreads() < mainAttackVector.totalThreads) {
-                    await ns.asleep(TIME_BETWEEN_ATTACK_PHASES);
-                    botnetServerCollection = await gatherBotnetServers(ns);
-                }
-
-                let timeBetweenAttacksStart = mainAttackVector.timeBetweenAttacksStart;
-
-                await waitUntilScriptsDontConflict(ns, attackableServer, scriptTimingCollection, timeBetweenAttacksStart);
-
-                let {hackDelay, hackWeakenDelay, growDelay, growWeakenDelay, waitTime} = calculateDelays(attackableServer, timeBetweenAttacksStart);
-                let {hackThreads, hackWeakenThreads, growThreads, growWeakenThreads} = calculateHackThreads(attackableServer, hackRatio);
-
-                await botnetServerCollection.hackTargetWithDelay(attackableServer, hackThreads, hackDelay);
-                let hackScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_HACK, hackThreads, hackDelay, attackableServer.hackTime);
-
-                await botnetServerCollection.weakenTargetWithDelay(attackableServer, hackWeakenThreads, hackWeakenDelay);
-                let hackWeakenScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_WEAKEN, hackWeakenThreads, hackWeakenDelay, attackableServer.weakenTime, hackScriptTiming);
-                scriptTimingCollection.add(hackWeakenScriptTiming);
-
-                await botnetServerCollection.growTargetWithDelay(attackableServer, growThreads, growDelay);
-                let growScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_GROW, growThreads, growDelay, attackableServer.growTime);
-
-                await botnetServerCollection.weakenTargetWithDelay(attackableServer, growWeakenThreads, growWeakenDelay);
-                let growWeakenScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_WEAKEN, growWeakenThreads, growWeakenDelay, attackableServer.weakenTime, growScriptTiming);
-                scriptTimingCollection.add(growWeakenScriptTiming);
-
-                await ns.asleep(waitTime);
-            }
-        }
         ns.print('------------------------------------------');
         ns.printf('Dispatcher finished, sleeping for %s seconds before starting again.', DISPATCHER_TIME_INTERVAL / 1000);
         ns.print('------------------------------------------');
@@ -108,6 +56,66 @@ async function prepareServers(ns) {
             await botnetServerCollection.fullyGrowTarget(attackableServer, growAttackDataCollection);
         }
     }
+}
+
+/** @param {NS} ns */
+async function attackServers(ns) {
+    let attackVectors = await getAttackVectors(ns);
+
+    if (attackVectors.length > 0) {
+        let mainAttackVector = attackVectors[0];
+        let scriptTimingCollection = new ScriptTimingCollection(ns);
+        let attackableServer = new AttackableServer(ns, mainAttackVector.name);
+        ns.print('Starting batch attack:');
+        ns.print(JSON.stringify(mainAttackVector, undefined, 2));
+
+        let runCount = 0;
+
+        let hackRatio = mainAttackVector.hackRatio;
+        let maxRunCount = 100;
+        let hackingLevel = ns.getHackingLevel();
+        if (hackingLevel < 900) {
+            maxRunCount = 10 * Math.ceil(hackingLevel / 100);
+        }
+        while (runCount <= maxRunCount) {
+            runCount++;
+
+            await attackServer(ns, mainAttackVector, attackableServer, hackRatio, scriptTimingCollection);
+
+
+        }
+    }
+}
+
+async function attackServer(ns, mainAttackVector, attackableServer, hackRatio, scriptTimingCollection) {
+    let botnetServerCollection = await gatherBotnetServers(ns);
+    while (botnetServerCollection.getAvailableAttackThreads() < mainAttackVector.totalThreads) {
+        await ns.asleep(TIME_BETWEEN_ATTACK_PHASES);
+        botnetServerCollection = await gatherBotnetServers(ns);
+    }
+
+    let timeBetweenAttacksStart = mainAttackVector.timeBetweenAttacksStart;
+
+    await waitUntilScriptsDontConflict(ns, attackableServer, scriptTimingCollection, timeBetweenAttacksStart);
+
+    let {hackDelay, hackWeakenDelay, growDelay, growWeakenDelay, waitTime} = calculateDelays(attackableServer, timeBetweenAttacksStart);
+    let {hackThreads, hackWeakenThreads, growThreads, growWeakenThreads} = calculateHackThreads(attackableServer, hackRatio);
+
+    await botnetServerCollection.hackTargetWithDelay(attackableServer, hackThreads, hackDelay);
+    let hackScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_HACK, hackThreads, hackDelay, attackableServer.hackTime);
+
+    await botnetServerCollection.weakenTargetWithDelay(attackableServer, hackWeakenThreads, hackWeakenDelay);
+    let hackWeakenScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_WEAKEN, hackWeakenThreads, hackWeakenDelay, attackableServer.weakenTime, hackScriptTiming);
+    scriptTimingCollection.add(hackWeakenScriptTiming);
+
+    await botnetServerCollection.growTargetWithDelay(attackableServer, growThreads, growDelay);
+    let growScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_GROW, growThreads, growDelay, attackableServer.growTime);
+
+    await botnetServerCollection.weakenTargetWithDelay(attackableServer, growWeakenThreads, growWeakenDelay);
+    let growWeakenScriptTiming = new ScriptTiming(attackableServer, ATTACK_TYPE_WEAKEN, growWeakenThreads, growWeakenDelay, attackableServer.weakenTime, growScriptTiming);
+    scriptTimingCollection.add(growWeakenScriptTiming);
+
+    await ns.asleep(waitTime);
 }
 
 function calculateDelays(attackableServer, timeBetweenAttacksStart) {
