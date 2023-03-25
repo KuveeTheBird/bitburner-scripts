@@ -302,6 +302,10 @@ export default class BotnetServerCollection {
         this.#ns.printf('Want to reserve %s x %s threads', numberOfBatches, numberOfThreadsInBatch);
         let batchesToReserve = numberOfBatches;
         for (let botnetServer of reservables) {
+            if (batchesToReserve === 0) {
+                break;
+            }
+
             let botnetBatchCapacity = botnetServer.getAvailableBatchCapacity(numberOfThreadsInBatch);
             let reservedThreads = 0;
             let reservedBatches = 0;
