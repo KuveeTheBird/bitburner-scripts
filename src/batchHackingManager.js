@@ -91,9 +91,9 @@ function getBatchAttacksData(ns) {
         if (currentBatchAttackInformation.moneyPerSec > mostProfitableMoneyPerSec) {
             mostProfitableMoneyPerSec = currentBatchAttackInformation.moneyPerSec;
         }
-        if (currentBatchAttackInformation.moneyPerSec < (0.1 * mostProfitableMoneyPerSec)) {
-            break;
-        }
+        // if (currentBatchAttackInformation.moneyPerSec < (0.1 * mostProfitableMoneyPerSec)) {
+        //     break;
+        // }
 
         ns.printf('#%s Reserving for %s', x, currentBatchAttackInformation.name);
         currentBatchAttackInformation.batchReservations = botnetServerCollection.reserveBatches(currentBatchAttackInformation.availableBatchCapacity, currentBatchAttackInformation.batchThreads);

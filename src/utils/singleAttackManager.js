@@ -17,9 +17,9 @@ export async function main(ns) {
     if (ns.pid !== pid) {
         ns.alert('INVALID PID FOR SINGLE_ATTACK_MANAGER');
     }
-    // ns.tail(pid, SERVER_NAME_HOME);
 
     let attackInformation = JSON.parse(attackInformationString);
+    ns.print(JSON.stringify(attackInformation, undefined, 2));
 
     let lastPids = await manageBatchAttacks(ns, attackInformation);
 

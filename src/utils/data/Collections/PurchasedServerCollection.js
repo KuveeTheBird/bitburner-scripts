@@ -189,7 +189,7 @@ export default class PurchasedServerCollection {
         let totalServerCost = numberOfServers * serverCost;
         let adjustedTotalServerCost = Math.ceil(totalServerCost * adjustment);
         let canAffordNewBatch = myMoney > adjustedTotalServerCost;
-        this.#ns.printf('Can afford %s servers with %sGB RAM: %s.', numberOfServers, serverRam, canAffordNewBatch ? 'YES' : 'NO');
+        this.#ns.printf('Can afford %s servers with %sGB RAM (adjusted cost: $%s): %s.', numberOfServers, serverRam, adjustedTotalServerCost, canAffordNewBatch ? 'YES' : 'NO');
         return canAffordNewBatch;
     }
 

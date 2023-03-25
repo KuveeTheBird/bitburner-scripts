@@ -47,4 +47,8 @@ export default class ProcessData {
         this.pid = pid;
         this.scriptPath = scriptPath;
     }
+
+    kill() {
+        this.#ns.kill(this.pid)
+    }
 }

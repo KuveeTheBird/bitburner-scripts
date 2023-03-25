@@ -1,12 +1,12 @@
-import BotnetServerCollection from "/utils/data/Collections/BotnetServerCollection";
 import ProcessData from "/utils/data/ProcessData";
 import {SNIPPETS} from "/constants/BatchAttack";
 
 /**
  * @param {NS} ns
  * @param {BotnetServerCollection} botnetServerCollection
+ * @return {ProcessData[]}
  */
-export function gatherProcessData(ns, botnetServerCollection) {
+export function gatherAttackProcessData(ns, botnetServerCollection) {
     let snippets = [];
     for (let snippet of SNIPPETS) {
         snippets.push(snippet.path);

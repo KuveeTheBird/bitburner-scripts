@@ -7,11 +7,11 @@ export async function main(ns) {
     let target;
 
     const targets = [
-        // 'netlink',
-        // 'phantasy',
-        // 'sigma-cosmetics',
-        // 'joesguns',
-        // 'foodnstuff',
+        'netlink',
+        'phantasy',
+        'sigma-cosmetics',
+        'joesguns',
+        'foodnstuff',
         'n00dles',
     ];
 

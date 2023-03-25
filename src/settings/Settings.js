@@ -9,18 +9,6 @@ export const MIN_TIME_BETWEEN_ATTACKS_START = TIME_BETWEEN_ATTACK_PHASES * 5;
 export const PURCHASED_SERVERS_COST_SAFETY_ADJUSTMENT = 2;
 export const PURCHASED_SERVERS_HACKING_LEVEL_REQUIREMENTS = [
     {
-        hackingLevel: 1,
-        serverRam: 8,
-    },
-    {
-        hackingLevel: 10,
-        serverRam: 16,
-    },
-    {
-        hackingLevel: 50,
-        serverRam: 32,
-    },
-    {
         hackingLevel: 100,
         serverRam: 64,
     },
