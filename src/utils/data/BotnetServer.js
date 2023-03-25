@@ -1,5 +1,6 @@
 import {calculateThreadCount} from "/utils/functions/calculateThreadCount";
 import * as CONSTANTS from '/constants/BatchAttack';
+import {SNIPPET_PATH_WAIT_GROW, SNIPPET_PATH_WAIT_HACK, SNIPPET_PATH_WAIT_WEAKEN} from '/constants/BatchAttack';
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
 import {FILENAME_GRACEFUL_KILL} from "/constants/Misc";
 
@@ -13,6 +14,7 @@ export class BotnetServer {
     character;
 
     reservedRam = 0;
+    reservedThreads = 0;
 
     /** @param {import(".").NS } ns
      * @param {string} name
@@ -61,7 +63,7 @@ export class BotnetServer {
     }
 
     get currentThreadCapacity() {
-        return calculateThreadCount(this.availableRam, CONSTANTS.SNIPPET_RAM_COST);
+        return calculateThreadCount(this.availableRam, CONSTANTS.SNIPPET_RAM_COST) - this.reservedThreads;
     }
 
     get isBeingGracefullyKilled() {
@@ -78,6 +80,18 @@ export class BotnetServer {
 
     attackTarget(attackableServer, threads, scriptPath) {
         return this.exec(scriptPath, threads, attackableServer.name);
+    }
+
+    weakenTargetWithDelay(attackableServer, threads, delay) {
+        return this.attackTargetWithDelay(attackableServer, threads, SNIPPET_PATH_WAIT_WEAKEN, delay);
+    }
+
+    hackTargetWithDelay(attackableServer, threads, delay) {
+        return this.attackTargetWithDelay(attackableServer, threads, SNIPPET_PATH_WAIT_HACK, delay);
+    }
+
+    growTargetWithDelay(attackableServer, threads, delay) {
+        return this.attackTargetWithDelay(attackableServer, threads, SNIPPET_PATH_WAIT_GROW, delay);
     }
 
     attackTargetWithDelay(attackableServer, threads, scriptPath, delay) {
@@ -104,5 +118,13 @@ export class BotnetServer {
         for (let snippet of CONSTANTS.SNIPPETS) {
             this.scp(snippet.path);
         }
+    }
+
+    getAvailableBatchCapacity(batchThreads) {
+        return Math.floor(this.currentThreadCapacity / batchThreads);
+    }
+
+    reserveThreads(numberOfThreads) {
+        this.reservedThreads += numberOfThreads;
     }
 }

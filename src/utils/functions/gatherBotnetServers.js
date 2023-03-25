@@ -5,14 +5,14 @@ import {SERVER_NAME_HOME} from "/constants/ServerNames";
 /** @param {NS} ns
  * @return BotnetServerCollection
  */
-export async function gatherBotnetServers(ns) {
+export function gatherBotnetServers(ns) {
     let scannedServers = [SERVER_NAME_HOME];
     let botnetServers = new BotnetServerCollection(ns);
     botnetServers.addByName(SERVER_NAME_HOME);
     ////////////////////////////////////////
     //REMOVE AFTER BATCH CAPACITY HANDLING//
     ////////////////////////////////////////
-    return botnetServers;
+    // return botnetServers;
 
     scanServers(ns, scannedServers, botnetServers, SERVER_NAME_HOME);
 

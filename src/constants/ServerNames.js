@@ -70,3 +70,4 @@ export const SERVER_NAME_STORMTECH = 'stormtech';
 export const SERVER_NAME_SNAP_FITNESS = 'snap-fitness';
 export const SERVER_NAME_IRON_GYM = 'iron-gym';
 export const SERVER_NAME_DARKWEB = 'darkweb';
+export const SERVER_NAME_WORLD_DAEMON = 'w0r1d_d43m0n';

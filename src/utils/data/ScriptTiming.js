@@ -1,4 +1,3 @@
-import {ATTACK_TYPES, TICK} from "/constants/BatchAttack";
 import {TIME_BETWEEN_ATTACK_PHASES} from "/settings/Settings";
 
 export class ScriptTiming {
@@ -54,11 +53,11 @@ export class ScriptTiming {
 
     /**
      * @param {AttackableServer} attackableServer
-     * @param {string} attackType
+     * @param {number} attackType
      * @param {number} threads
      * @param {number} delay
      * @param {number} scriptRuntime
-     * @param {ScriptTiming} previous
+     * @param {ScriptTiming} [previous]
      */
     constructor(attackableServer, attackType, threads, delay, scriptRuntime, previous) {
         this.attackableServer = attackableServer;

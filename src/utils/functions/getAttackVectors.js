@@ -55,8 +55,8 @@ export async function getAttackVectors(ns) {
  * @param {BotnetServerCollection} botnetServerCollection
  */
 export function calculateAttackVector(ns, attackableServer, hackRatio, botnetServerCollection) {
-    let botnetThreadCapacity = botnetServerCollection.getAvailableAttackThreads();
     let attackParams = calculateAttackParams(ns, attackableServer, hackRatio);
+    let botnetThreadCapacity = botnetServerCollection.getAvailableAttackThreads();
     if (botnetThreadCapacity < attackParams.totalThreads) {
         return;
     }

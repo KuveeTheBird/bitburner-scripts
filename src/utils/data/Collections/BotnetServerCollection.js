@@ -1,5 +1,4 @@
 import {BotnetServer} from "/utils/data/BotnetServer";
-import ProcessData from "/utils/data/ProcessData";
 import {
     ATTACK_TYPE_GROW,
     ATTACK_TYPE_HACK,
@@ -60,7 +59,7 @@ export default class BotnetServerCollection {
     }
 
     serverAlreadyAdded(server) {
-        if (undefined === server) {
+        if (!server) {
             return true;
         }
 
@@ -148,6 +147,15 @@ export default class BotnetServerCollection {
         }
 
         return availableThreads;
+    }
+
+    getAvailableBatchCapacity(batchThreads) {
+        let availableBatchCapacity = 0;
+        for (let serverObject of this.serverObjects) {
+            availableBatchCapacity += serverObject.getAvailableBatchCapacity(batchThreads);
+        }
+
+        return availableBatchCapacity;
     }
 
     /**
@@ -282,8 +290,38 @@ export default class BotnetServerCollection {
         }
     }
 
+    reserveBatches(numberOfBatches, numberOfThreadsInBatch) {
+        let reservables = this.serverObjects.filter(function (botnetServer) {
+            return botnetServer.currentThreadCapacity > numberOfThreadsInBatch;
+        }).sort(function(a, b) {
+            return a.currentThreadCapacity - b.currentThreadCapacity;
+        });
 
-    // weakenServerWithDelay
-    // hackServerWithDelay
-    // growServerWithDelay
+        let reservations = [];
+
+        this.#ns.printf('Want to reserve %s x %s threads', numberOfBatches, numberOfThreadsInBatch);
+        let batchesToReserve = numberOfBatches;
+        for (let botnetServer of reservables) {
+            let botnetBatchCapacity = botnetServer.getAvailableBatchCapacity(numberOfThreadsInBatch);
+            let reservedThreads = 0;
+            let reservedBatches = 0;
+            if (botnetBatchCapacity < batchesToReserve) {
+                reservedBatches = botnetBatchCapacity
+            } else {
+                reservedBatches = batchesToReserve
+            }
+
+            batchesToReserve -= reservedBatches;
+            reservedThreads = reservedBatches * numberOfThreadsInBatch;
+            botnetServer.reserveThreads(reservedThreads);
+
+            reservations.push({
+                name: botnetServer.name,
+                reservedThreads: reservedThreads,
+                reservedBatches: reservedBatches,
+            });
+        }
+
+        return reservations;
+    }
 }

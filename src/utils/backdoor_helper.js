@@ -13,12 +13,15 @@ export async function main(ns) {
     for (let targetHostName of ADDITIONAL_BACKDOORS) {
         generateBackdoorInstructions(ns, homeServer, targetHostName);
     }
-    ns.alert('WORLD DAEMON NOT IMPLEMENTED YET');
+    // ns.alert('WORLD DAEMON NOT IMPLEMENTED YET');
 }
 
 function generateBackdoorInstructions(ns, homeServer, targetHostName) {
     let targetServer = searchForServer(homeServer, targetHostName);
-    if (targetServer.backdoorInstalled) {
+    if (!targetServer) {
+        ns.tprintf('%s doesn\'t exist (yet).', targetHostName);
+        return;
+    } else if (targetServer.backdoorInstalled) {
         ns.tprintf('%s already backdoored.', targetServer.name);
         return;
     } else if (!targetServer.hackable) {
