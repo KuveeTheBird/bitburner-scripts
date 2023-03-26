@@ -2,6 +2,7 @@ import {gatherAttackableServers} from "/utils/functions/gatherAttackableServers"
 import {gatherBotnetServers} from "/utils/functions/gatherBotnetServers";
 import {generateBatchAttackInformation} from "/utils/functions/generateBatchAttackInformation";
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
+import {TICK} from "/constants/BatchAttack";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -23,6 +24,7 @@ export async function main(ns) {
         let batchAttacksData = getBatchAttacksData(ns);
         if (!batchAttacksData.length) {
             ns.printf('Can\'t execute any batches');
+            return;
         }
 
         let attackNumber = 1;
@@ -71,12 +73,11 @@ function startSingleAttackManager(ns, batchAttackData, attackNumber) {
 /**
  * @param {NS} ns
  */
-function getBatchAttacksData(ns) {
+async function getBatchAttacksData(ns) {
     let attackableServers = gatherAttackableServers(ns);
     let botnetServerCollection = gatherBotnetServers(ns);
 
     let batchAttacksData = [];
-    let mostProfitableMoneyPerSec = 0;
 
     let x = 0;
     while (x < 20) {
@@ -84,15 +85,10 @@ function getBatchAttacksData(ns) {
         let batchAttackInformation = generateBatchAttackInformation(ns, attackableServers, botnetServerCollection);
 
         if (!batchAttackInformation.length) {
+            ns.printf('No more batch attack information');
             break;
         }
         let currentBatchAttackInformation = batchAttackInformation[0];
-        if (currentBatchAttackInformation.moneyPerSec > mostProfitableMoneyPerSec) {
-            mostProfitableMoneyPerSec = currentBatchAttackInformation.moneyPerSec;
-        }
-        // if (currentBatchAttackInformation.moneyPerSec < (0.1 * mostProfitableMoneyPerSec)) {
-        //     break;
-        // }
 
         ns.printf('#%s Reserving for %s', x, currentBatchAttackInformation.name);
         currentBatchAttackInformation.batchReservations = botnetServerCollection.reserveBatches(currentBatchAttackInformation.availableBatchCapacity, currentBatchAttackInformation.batchThreads);
@@ -104,6 +100,7 @@ function getBatchAttacksData(ns) {
         }
 
         batchAttacksData.push(currentBatchAttackInformation);
+        await ns.asleep(TICK);
     }
 
     return batchAttacksData;

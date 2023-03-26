@@ -292,21 +292,23 @@ export default class BotnetServerCollection {
 
     reserveBatches(numberOfBatches, numberOfThreadsInBatch) {
         let reservables = this.serverObjects.filter(function (botnetServer) {
-            return botnetServer.currentThreadCapacity > numberOfThreadsInBatch;
+            return botnetServer.currentThreadCapacity >= numberOfThreadsInBatch;
         }).sort(function(a, b) {
             return a.currentThreadCapacity - b.currentThreadCapacity;
         });
 
         let reservations = [];
 
-        this.#ns.printf('Want to reserve %s x %s threads', numberOfBatches, numberOfThreadsInBatch);
+        this.#ns.printf('Want to reserve %s x %s threads, number of reservable servers: %s', numberOfBatches, numberOfThreadsInBatch, reservables.length);
         let batchesToReserve = numberOfBatches;
         for (let botnetServer of reservables) {
             if (batchesToReserve === 0) {
+                this.#ns.printf('No more batches to reserve.');
                 break;
             }
 
             let botnetBatchCapacity = botnetServer.getAvailableBatchCapacity(numberOfThreadsInBatch);
+            this.#ns.printf('Available botnetBatchCapacity: %s', botnetBatchCapacity);
             let reservedThreads = 0;
             let reservedBatches = 0;
             if (botnetBatchCapacity < batchesToReserve) {
@@ -317,6 +319,7 @@ export default class BotnetServerCollection {
 
             batchesToReserve -= reservedBatches;
             reservedThreads = reservedBatches * numberOfThreadsInBatch;
+            this.#ns.printf('Trying to reserve %s threads on %s', reservedThreads, botnetServer.name);
             botnetServer.reserveThreads(reservedThreads);
 
             reservations.push({
