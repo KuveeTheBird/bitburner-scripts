@@ -38,7 +38,6 @@ export async function main(ns) {
             wait = false;
             for (let pid of singleAttackManagerPids) {
                 if (ns.isRunning(pid)) {
-                    ns.printf('Pid: %s is still running', pid);
                     wait = true;
                     break;
                 }

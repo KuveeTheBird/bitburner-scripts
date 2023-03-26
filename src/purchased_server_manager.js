@@ -1,8 +1,15 @@
 import PurchasedServerCollection from "/utils/data/Collections/PurchasedServerCollection";
+import {PURCHASED_SERVERS_HACKING_LEVEL_REQUIREMENTS} from "/settings/Settings";
 
 /** @param {NS} ns */
 export async function main(ns) {
     ns.disableLog('ALL');
+
+    if (ns.getHackingLevel() < PURCHASED_SERVERS_HACKING_LEVEL_REQUIREMENTS[0].hackingLevel) {
+        ns.printf('No purchased servers are available yet.');
+        return;
+    }
+
     let purchasedServerCollection = new PurchasedServerCollection(ns);
     purchasedServerCollection.gatherServers();
     if (purchasedServerCollection.areAllUpgradedToTheMax()) {

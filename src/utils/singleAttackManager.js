@@ -1,4 +1,8 @@
-import {MIN_TIME_BETWEEN_ATTACKS_START, TIME_BETWEEN_ATTACK_PHASES} from "/settings/Settings";
+import {
+    MIN_TIME_BETWEEN_ATTACKS_START,
+    NUMBER_OF_BATCH_RUNS_IN_A_SINGLE_ATTACK,
+    TIME_BETWEEN_ATTACK_PHASES
+} from "/settings/Settings";
 import {ScriptTiming} from "/utils/data/ScriptTiming";
 import {ATTACK_TYPE_GROW, ATTACK_TYPE_HACK, ATTACK_TYPE_WEAKEN} from "/constants/BatchAttack";
 import {BotnetServer} from "/utils/data/BotnetServer";
@@ -31,7 +35,7 @@ export async function main(ns) {
         wait = false;
         for (let pid of lastPids) {
             if (ns.isRunning(pid)) {
-                ns.printf('Pid: %s is still running', pid);
+                // ns.printf('Pid: %s is still running', pid);
                 wait = true;
                 break;
             }
@@ -45,20 +49,25 @@ async function manageBatchAttacks(ns, attackInformation) {
     let batchReservationKeys = Object.keys(attackInformation.batchReservations);
     let scriptTimingCollection = new ScriptTimingCollection(ns);
     let lastPids = [];
-    ns.printf('Starting attack with %s batches against %s.', attackInformation.availableBatchCapacity, attackableServer.name);
-    for (let i of batchReservationKeys) {
-        let batchReservation = attackInformation.batchReservations[i];
-        let botnetServerName = batchReservation.name;
-        let numberOfBatches = batchReservation.reservedBatches;
+    let attacksNumber = 1;
+    let totalAttacksNumber = NUMBER_OF_BATCH_RUNS_IN_A_SINGLE_ATTACK;
+    ns.printf('Starting %s attack with %s batches against %s.', totalAttacksNumber, attackInformation.availableBatchCapacity, attackableServer.name);
+    while (attacksNumber <= totalAttacksNumber) {
+        ns.printf('Starting #%s attack.', attacksNumber++);
+        for (let i of batchReservationKeys) {
+            let batchReservation = attackInformation.batchReservations[i];
+            let botnetServerName = batchReservation.name;
+            let numberOfBatches = batchReservation.reservedBatches;
 
-        let botnetServer = new BotnetServer(ns, botnetServerName);
+            let botnetServer = new BotnetServer(ns, botnetServerName);
 
-        ns.printf('Starting %s batches on %s', numberOfBatches, botnetServer.name)
-        for (let batchNumber = 0 ; batchNumber < numberOfBatches ; batchNumber++) {
-            ns.printf('Starting batch #%s on %s', batchNumber, botnetServer.name)
-            lastPids = await attackServer(ns, botnetServer, attackableServer, scriptTimingCollection, attackInformation);
+            ns.printf('Starting %s batches on %s', numberOfBatches, botnetServer.name)
+            for (let batchNumber = 0 ; batchNumber < numberOfBatches ; batchNumber++) {
+                // ns.printf('Starting batch #%s on %s', batchNumber, botnetServer.name);
+                lastPids = await attackServer(ns, botnetServer, attackableServer, scriptTimingCollection, attackInformation);
+            }
+
         }
-
     }
 
     return lastPids;
