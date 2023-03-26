@@ -21,7 +21,8 @@ export async function main(ns) {
         }
 
 
-        let batchAttacksData = getBatchAttacksData(ns);
+        let batchAttacksData = await getBatchAttacksData(ns);
+
         if (!batchAttacksData.length) {
             ns.printf('Can\'t execute any batches');
             return;
