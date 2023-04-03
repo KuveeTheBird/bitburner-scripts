@@ -15,9 +15,12 @@ export async function main(ns) {
             ns.exit();
         }
 
-        while (ns.isRunning(preparationPid)) {
+        if (ns.isRunning(preparationPid)) {
             ns.printf('Waiting for preparation to end, pid: %s', preparationPid);
-            await ns.asleep(1000);
+
+            while (ns.isRunning(preparationPid)) {
+                await ns.asleep(1000);
+            }
         }
 
 

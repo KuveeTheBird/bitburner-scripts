@@ -1,5 +1,6 @@
 import {Server} from '/utils/data/Server.js';
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
+import {WEAKEN_TIME_CUTOFF_BASE} from "/settings/Settings";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -7,17 +8,16 @@ export async function main(ns) {
     let target;
 
     const targets = [
-        'netlink',
+        // 'netlink',
         'phantasy',
         'sigma-cosmetics',
         'joesguns',
-        'foodnstuff',
         'n00dles',
     ];
 
     for (target of targets) {
         let targetServer = new Server(ns, target);
-        if (targetServer.hackable && targetServer.canHaveMoney && targetServer.hasRootAccess) {
+        if (targetServer.hackable && targetServer.canHaveMoney && targetServer.hasRootAccess && targetServer.weakenTime < WEAKEN_TIME_CUTOFF_BASE) {
             break;
         }
     }

@@ -21,7 +21,7 @@ export async function main(ns) {
         // ns.exec(SCRIPT_PATH_PURCHASED_SERVER_MANAGER, SERVER_NAME_HOME);
         // await ns.asleep(TICK);
 
-        if (homeServerRam < 128) {
+        if (homeServerRam <= 128) {
             ns.exec('hacking_dispatcher.js', SERVER_NAME_HOME);
 
             if (homeServerRam !== previousHomeServerRam && ns.isRunning(SCRIPT_PATH_EARLY_HACK_TEMPLATE, SERVER_NAME_HOME, SERVER_NAME_N00DLES)) {
@@ -33,9 +33,13 @@ export async function main(ns) {
                     if (!ns.isRunning(SCRIPT_PATH_EARLY_HACK_TEMPLATE, SERVER_NAME_HOME, SERVER_NAME_N00DLES)) {
                         ns.exec(SCRIPT_PATH_EARLY_HACK_TEMPLATE, SERVER_NAME_HOME, 6, SERVER_NAME_N00DLES);
                     }
-                } else {
+                } else if (ns.getServerMaxRam(SERVER_NAME_HOME) === 64) {
                     if (!ns.isRunning(SCRIPT_PATH_EARLY_HACK_TEMPLATE, SERVER_NAME_HOME, SERVER_NAME_N00DLES)) {
                         ns.exec(SCRIPT_PATH_EARLY_HACK_TEMPLATE, SERVER_NAME_HOME, 18, SERVER_NAME_N00DLES);
+                    }
+                } else {
+                    if (!ns.isRunning(SCRIPT_PATH_EARLY_HACK_TEMPLATE, SERVER_NAME_HOME, SERVER_NAME_N00DLES)) {
+                        ns.exec(SCRIPT_PATH_EARLY_HACK_TEMPLATE, SERVER_NAME_HOME, 30, SERVER_NAME_N00DLES);
                     }
                 }
             }

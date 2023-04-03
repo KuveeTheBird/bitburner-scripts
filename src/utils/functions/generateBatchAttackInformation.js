@@ -62,7 +62,10 @@ function generateBatchAttackInformationForAttackableServerAndHackRatio(attackabl
     let totalBatchThreads = availableBatchCapacity * batchThreads;
     let secondsBetweenAttacksStart = timeBetweenAttacksStart / 1000;
     let moneyPerBatch = attackableServer.maxMoney * hackRatio;
-    let moneyPerSec = moneyPerBatch / secondsBetweenAttacksStart;
+    let totalBatchesMoney = (moneyPerBatch * availableBatchCapacity);
+    let totalBatchesTime = weakenTime + ((availableBatchCapacity - 1) * timeBetweenAttacksStart);
+    let totalBatchesSeconds = totalBatchesTime / 1000;
+    let moneyPerSec = totalBatchesMoney / totalBatchesSeconds;
     let moneyMillionPerSec = Math.round(moneyPerSec / 1000 / 1000) + 'm$';
 
     return {
@@ -81,6 +84,8 @@ function generateBatchAttackInformationForAttackableServerAndHackRatio(attackabl
         'totalBatchThreads': totalBatchThreads,
         'timeBetweenAttacksStart': timeBetweenAttacksStart,
         'secondsBetweenAttacksStart': secondsBetweenAttacksStart,
+        'totalBatchesMoney': totalBatchesMoney,
+        'totalBatchesSeconds': totalBatchesSeconds,
         'moneyPerSec': moneyPerSec,
         'moneyMillionPerSec': moneyMillionPerSec,
     };
