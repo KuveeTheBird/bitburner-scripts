@@ -1,4 +1,6 @@
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
+import {STANDARD_PROGRAMS} from "/constants/FileNames";
+
 
 export class Character {
     /** @param {import(".").NS } #ns */
@@ -19,20 +21,10 @@ export class Character {
     get numberOfPortOpeners() {
         let canHackThisManyPorts = 0;
 
-        if (this.#ns.fileExists("BruteSSH.exe", SERVER_NAME_HOME)) {
-            canHackThisManyPorts++;
-        }
-        if (this.#ns.fileExists("FTPCrack.exe", SERVER_NAME_HOME)) {
-            canHackThisManyPorts++;
-        }
-        if (this.#ns.fileExists("relaySMTP.exe", SERVER_NAME_HOME)) {
-            canHackThisManyPorts++;
-        }
-        if (this.#ns.fileExists("HTTPWorm.exe", SERVER_NAME_HOME)) {
-            canHackThisManyPorts++;
-        }
-        if (this.#ns.fileExists("SQLInject.exe", SERVER_NAME_HOME)) {
-            canHackThisManyPorts++;
+        for (let programName of STANDARD_PROGRAMS) {
+            if (this.#ns.fileExists(programName, SERVER_NAME_HOME)) {
+                canHackThisManyPorts++;
+            }
         }
 
         return canHackThisManyPorts;

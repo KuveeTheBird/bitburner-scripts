@@ -2,6 +2,8 @@ import {Server} from '/utils/data/Server.js';
 import {FACTIONS_BACKDOOR_REQUIREMENTS} from "/constants/Factions";
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
 import {ADDITIONAL_BACKDOORS} from "/constants/Misc";
+import {searchForServer} from "/utils/functions/searchForServer";
+import {gatherAncestry} from "/utils/functions/gatherAncestry";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -45,40 +47,4 @@ function generateBackdoorInstructions(ns, homeServer, targetHostName) {
     }
     ns.tprintf('backdoor');
     ns.tprintf('------------------------');
-}
-
-/**
- *
- * @param {Server} parentServer
- * @param {string} targetServerHostname
- * @return {Server|false}
- */
-function searchForServer(parentServer, targetServerHostname) {
-    for (let childServer of parentServer.children) {
-        if (childServer.name === targetServerHostname) {
-            return childServer;
-        }
-
-        if (childServer.children.length) {
-            let searchResult = searchForServer(childServer, targetServerHostname);
-            if (searchResult !== false) {
-                return searchResult
-            }
-        }
-
-    }
-    return false;
-}
-
-/**
- * @param {Server} homeServer
- * @param {string} serverName
- * @param {string[]} flatArray
- */
-function gatherAncestry(homeServer, serverName, flatArray) {
-    flatArray.unshift(serverName);
-    let server = searchForServer(homeServer, serverName);
-    if (server.parent) {
-        gatherAncestry(homeServer, server.parent, flatArray);
-    }
 }

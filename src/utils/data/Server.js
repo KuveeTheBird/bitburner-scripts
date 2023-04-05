@@ -1,6 +1,7 @@
 import {Character} from '/utils/data/Character.js';
 import * as CONSTANTS from '/constants/BatchAttack';
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
+import {FILE_BRUTESSH, FILE_FTPCRACK, FILE_HTTPWORM, FILE_RELAYSMTP, FILE_SQLINJECT} from "/constants/FileNames";
 
 export class Server {
 
@@ -255,19 +256,19 @@ export class Server {
             return;
         }
 
-        if (this.#ns.fileExists("BruteSSH.exe", SERVER_NAME_HOME)) {
+        if (this.#ns.fileExists(FILE_BRUTESSH, SERVER_NAME_HOME)) {
             this.#ns.brutessh(this.name);
         }
-        if (this.#ns.fileExists("FTPCrack.exe", SERVER_NAME_HOME)) {
+        if (this.#ns.fileExists(FILE_FTPCRACK, SERVER_NAME_HOME)) {
             this.#ns.ftpcrack(this.name);
         }
-        if (this.#ns.fileExists("relaySMTP.exe", SERVER_NAME_HOME)) {
+        if (this.#ns.fileExists(FILE_RELAYSMTP, SERVER_NAME_HOME)) {
             this.#ns.relaysmtp(this.name);
         }
-        if (this.#ns.fileExists("HTTPWorm.exe", SERVER_NAME_HOME)) {
+        if (this.#ns.fileExists(FILE_HTTPWORM, SERVER_NAME_HOME)) {
             this.#ns.httpworm(this.name);
         }
-        if (this.#ns.fileExists("SQLInject.exe", SERVER_NAME_HOME)) {
+        if (this.#ns.fileExists(FILE_SQLINJECT, SERVER_NAME_HOME)) {
             this.#ns.sqlinject(this.name);
         }
 
