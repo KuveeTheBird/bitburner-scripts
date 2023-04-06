@@ -1,6 +1,6 @@
 import {FACTIONS_BACKDOOR_REQUIREMENTS} from "/constants/Factions";
 import {Server} from "/utils/data/Server";
-import {SERVER_NAME_HOME} from "/constants/ServerNames";
+import {SERVER_NAME_HOME, SERVER_NAME_WORLD_DAEMON} from "/constants/ServerNames";
 import {searchForServer} from "/utils/functions/searchForServer";
 import {gatherAncestry} from "/utils/functions/gatherAncestry";
 
@@ -11,27 +11,37 @@ export async function main(ns) {
 
     for (let factionName of factionNames) {
         let factionServer = FACTIONS_BACKDOOR_REQUIREMENTS[factionName];
-        let targetServer = searchForServer(homeServer, factionServer);
-        if (!targetServer) {
-            continue;
-        } else if (targetServer.backdoorInstalled) {
-            continue;
-        } else if (!targetServer.hackable) {
-            continue;
-        } else if (!targetServer.hasRootAccess) {
-            continue;
-        }
-
-        let flatArray = [];
-
-        gatherAncestry(homeServer, targetServer.name, flatArray);
-        flatArray.shift();
-
-        ns.singularity.connect(SERVER_NAME_HOME);
-        for (let server of flatArray) {
-            ns.singularity.connect(server);
-        }
-        await ns.singularity.installBackdoor();
-        ns.singularity.connect(SERVER_NAME_HOME);
+        await backdoorServerIfPossible(ns, homeServer, factionServer);
     }
+    await backdoorServerIfPossible(ns, homeServer, SERVER_NAME_WORLD_DAEMON);
+}
+
+/**
+ * @param {NS} ns
+ * @param {Server} homeServer
+ * @param {string} targetServerName
+ */
+async function backdoorServerIfPossible(ns, homeServer, targetServerName) {
+    let targetServer = searchForServer(homeServer, targetServerName);
+    if (!targetServer) {
+        return;
+    } else if (targetServer.backdoorInstalled) {
+        return;
+    } else if (!targetServer.hackable) {
+        return;
+    } else if (!targetServer.hasRootAccess) {
+        return;
+    }
+
+    let flatArray = [];
+
+    gatherAncestry(homeServer, targetServer.name, flatArray);
+    flatArray.shift();
+
+    ns.singularity.connect(SERVER_NAME_HOME);
+    for (let server of flatArray) {
+        ns.singularity.connect(server);
+    }
+    await ns.singularity.installBackdoor();
+    ns.singularity.connect(SERVER_NAME_HOME);
 }
