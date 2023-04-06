@@ -6,7 +6,7 @@ import {getUnboughtAugmentsFromFaction} from "/utils/functions/singularity/getUn
  */
 export function getNextTargetFaction(ns) {
     for (let factionName of FACTIONS_PREFERRED_ORDER) {
-        if (getUnboughtAugmentsFromFaction(ns, factionName) > 0) {
+        if (getUnboughtAugmentsFromFaction(ns, factionName).length > 0) {
             return factionName;
         }
     }

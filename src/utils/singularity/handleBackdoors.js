@@ -13,7 +13,7 @@ export async function main(ns) {
         let factionServer = FACTIONS_BACKDOOR_REQUIREMENTS[factionName];
         await backdoorServerIfPossible(ns, homeServer, factionServer);
     }
-    await backdoorServerIfPossible(ns, homeServer, SERVER_NAME_WORLD_DAEMON);
+    await backdoorServerIfPossible(ns, homeServer, SERVER_NAME_WORLD_DAEMON, true);
 }
 
 /**
@@ -21,7 +21,7 @@ export async function main(ns) {
  * @param {Server} homeServer
  * @param {string} targetServerName
  */
-async function backdoorServerIfPossible(ns, homeServer, targetServerName) {
+async function backdoorServerIfPossible(ns, homeServer, targetServerName, killAll) {
     let targetServer = searchForServer(homeServer, targetServerName);
     if (!targetServer) {
         return;
@@ -43,5 +43,9 @@ async function backdoorServerIfPossible(ns, homeServer, targetServerName) {
         ns.singularity.connect(server);
     }
     await ns.singularity.installBackdoor();
+
+    if (killAll) {
+        ns.killall(SERVER_NAME_HOME, false);
+    }
     ns.singularity.connect(SERVER_NAME_HOME);
 }
