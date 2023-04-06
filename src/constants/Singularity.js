@@ -1,4 +1,7 @@
 export const TRAINING_BASE_STAT = 5;
+export const FACTION_FAVOR_GAIN_THRESHOLD = 75;
+export const FACTION_DONATE_MONEY_SAFETY_MARGIN = 3;
+export const AUGMENTATION_NEUROFLUX_GOVERNOR = "NeuroFlux Governor";
 
 ////////
 //WORK//
