@@ -2,6 +2,7 @@ import {SERVER_NAME_HOME, SERVER_NAME_N00DLES} from "/constants/ServerNames";
 import {
     SCRIPT_PATH_BATCH_HACKING_MANAGER,
     SCRIPT_PATH_EARLY_HACK_TEMPLATE,
+    SCRIPT_PATH_HASHNET_MANAGER,
     SCRIPT_PATH_KILL_EHT_EVERYWHERE,
     SCRIPT_PATH_NETWORK_DISCOVERY,
     SCRIPT_PATH_SINGULARITY_AUTO_BUY_ESSENTIALS,
@@ -12,6 +13,7 @@ import {
     SCRIPT_PATH_SINGULARITY_HANDLE_TRAININGS,
     SCRIPT_PATH_SINGULARITY_HANDLE_TRAVEL_PRE_REQUISITES,
     SCRIPT_PATH_SINGULARITY_INSTALL_AUGMENTS,
+    SCRIPT_PATH_SINGULARITY_WORK_FOR_COMPANY,
     SCRIPT_PATH_SINGULARITY_WORK_FOR_FACTION
 } from '/constants/FileNames'
 import {TICK} from "/constants/BatchAttack";
@@ -25,6 +27,9 @@ export async function main(ns) {
         homeServerRam = ns.getServerMaxRam(SERVER_NAME_HOME);
 
         ns.exec(SCRIPT_PATH_NETWORK_DISCOVERY, SERVER_NAME_HOME);
+        await ns.asleep(TICK);
+
+        ns.exec(SCRIPT_PATH_HASHNET_MANAGER, SERVER_NAME_HOME);
         await ns.asleep(TICK);
 
         await initSingularityFunctions(ns);
@@ -62,6 +67,9 @@ async function initSingularityFunctions(ns) {
     await ns.asleep(TICK);
 
     ns.exec(SCRIPT_PATH_SINGULARITY_WORK_FOR_FACTION, SERVER_NAME_HOME);
+    await ns.asleep(TICK);
+
+    ns.exec(SCRIPT_PATH_SINGULARITY_WORK_FOR_COMPANY, SERVER_NAME_HOME);
     await ns.asleep(TICK);
 
     ns.exec(SCRIPT_PATH_SINGULARITY_COMMIT_CRIMES, SERVER_NAME_HOME);

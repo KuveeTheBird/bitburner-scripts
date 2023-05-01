@@ -5,6 +5,9 @@ import {FACTION_DONATE_MONEY_SAFETY_MARGIN} from "/constants/Singularity";
 /** @param {import(".").NS } ns */
 export async function main(ns) {
     let factionName = getNextTargetFaction(ns);
+    if (factionName === false) {
+        return;
+    }
     let player = ns.getPlayer();
     let singularity = ns.singularity;
     let factionRepMult = player.mults.faction_rep;

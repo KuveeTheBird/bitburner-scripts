@@ -1,4 +1,4 @@
-import {FACTION_NAME_ILLUMINATI, FACTIONS_PREFERRED_ORDER} from "/constants/Factions";
+import {FACTIONS_PREFERRED_ORDER} from "/constants/Factions";
 import {getUnboughtAugmentsFromFaction} from "/utils/functions/singularity/getUnboughtAugmentsFromFaction";
 
 /** @param {import(".").NS } ns
@@ -11,5 +11,5 @@ export function getNextTargetFaction(ns) {
         }
     }
 
-    return FACTION_NAME_ILLUMINATI;
+    return false;
 }

@@ -8,6 +8,9 @@ export async function main(ns) {
     let singularity = ns.singularity;
     let currentWork = singularity.getCurrentWork();
     let targetFaction = getNextTargetFaction(ns);
+    if (targetFaction === false) {
+        return;
+    }
     let playerFactions = player.factions;
 
     if (
@@ -21,13 +24,12 @@ export async function main(ns) {
     }
 
     if (singularity.getFactionRep(targetFaction) > getHighestAugmentRepReqForFaction(ns, targetFaction)) {
-        if (currentWork.type === WORK_TYPE_FACTION) {
+        if (currentWork && currentWork.type === WORK_TYPE_FACTION) {
             singularity.stopAction();
         }
         return;
-    } else if (currentWork.type === WORK_TYPE_FACTION) {
+    } else if (currentWork && currentWork.type === WORK_TYPE_FACTION) {
         return;
-
     }
 
     let hackStats = player.skills.hacking;

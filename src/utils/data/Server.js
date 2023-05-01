@@ -41,7 +41,7 @@ export class Server {
         }
 
         if (this.name === SERVER_NAME_HOME) {
-            this.reservedRam = 32;
+            this.reservedRam = 64;
         }
 
         this.installSnippets();

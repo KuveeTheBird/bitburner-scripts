@@ -1,0 +1,10 @@
+export const COMPANY_NAME_FOUR_SIGMA = 'Four Sigma';
+export const COMPANY_NAME_ECORP = 'ECorp';
+export const COMPANY_NAME_MEGACORP = 'MegaCorp';
+export const COMPANY_NAME_KUAIGONG_INTERNATIONAL = 'KuaiGong International';
+export const COMPANY_NAME_NWO = 'NWO';
+export const COMPANY_NAME_BLADE_INDUSTRIES = 'Blade Industries';
+export const COMPANY_NAME_OMNITEK_INCORPORATED = 'OmniTek Incorporated';
+export const COMPANY_NAME_BACHMAN_AND_ASSOCIATES = 'Bachman & Associates';
+export const COMPANY_NAME_CLARKE_INCORPORATED = 'Clarke Incorporated';
+export const COMPANY_NAME_FULCRUM_SECRET_TECHNOLOGIES = 'Fulcrum Secret Technologies';

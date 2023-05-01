@@ -18,6 +18,10 @@ import {SCRIPT_PATH_INIT} from "/constants/FileNames";
 export async function main(ns) {
     let singularity = ns.singularity;
     let factionName = getNextTargetFaction(ns);
+    if (factionName === false) {
+        return;
+    }
+
     let playerFactions = ns.getPlayer().factions;
 
     if (!playerFactions.includes(factionName)) {
@@ -54,9 +58,10 @@ export async function main(ns) {
             await ns.asleep(1);
 
             if (singularity.purchaseAugmentation(factionName, nextAug)) {
-                ns.toast("Bought augmentation: " + nextAug);
+                ns.toast('Bought augmentation: ' + nextAug);
+                ns.tprintf('Bought augmentation: %s', nextAug);
             } else {
-                ns.toast("Error buying augmentation: " + nextAug, "error");
+                ns.toast('Error buying augmentation: ' + nextAug, "error");
                 return;
             }
         }

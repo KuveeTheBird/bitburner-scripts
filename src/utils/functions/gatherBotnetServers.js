@@ -9,10 +9,6 @@ export function gatherBotnetServers(ns) {
     let scannedServers = [SERVER_NAME_HOME];
     let botnetServers = new BotnetServerCollection(ns);
     botnetServers.addByName(SERVER_NAME_HOME);
-    ////////////////////////////////////////
-    //REMOVE AFTER BATCH CAPACITY HANDLING//
-    ////////////////////////////////////////
-    // return botnetServers;
 
     scanServers(ns, scannedServers, botnetServers, SERVER_NAME_HOME);
 
@@ -38,7 +34,7 @@ function scanServers(ns, scannedServers, botnetServers, hostname) {
 
         let botnetServer = new BotnetServer(ns, host);
 
-        if (botnetServer.hasRootAccess && botnetServer.maxRam > 0) {
+        if (botnetServer.hasRootAccess && botnetServer.maxRam > 0 && !botnetServer.name.includes('hacknet-server')) {
             botnetServers.add(botnetServer);
         }
 

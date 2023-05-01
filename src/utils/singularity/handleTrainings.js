@@ -25,7 +25,14 @@ export async function main(ns) {
     let targetDexLevel = TRAINING_BASE_STAT * player.mults.dexterity * player.mults.dexterity_exp;
     let targetAgiLevel = TRAINING_BASE_STAT * player.mults.agility * player.mults.agility_exp;
 
-    if (Object.keys(FACTIONS_BATTLE_STAT_REQUIREMENTS).includes(nextTarget)) {
+    if (targetHackingLevel > 3000) {
+        targetHackingLevel = 3000;
+    }
+    if (targetChaLevel > 500) {
+        targetChaLevel = 500;
+    }
+
+    if (nextTarget !== false && Object.keys(FACTIONS_BATTLE_STAT_REQUIREMENTS).includes(nextTarget)) {
         let battleStatRequirement = FACTIONS_BATTLE_STAT_REQUIREMENTS[nextTarget];
 
         targetStrLevel = Math.max(targetStrLevel, battleStatRequirement);

@@ -1,12 +1,15 @@
 export const TRAINING_BASE_STAT = 5;
 export const FACTION_FAVOR_GAIN_THRESHOLD = 75;
 export const FACTION_DONATE_MONEY_SAFETY_MARGIN = 3;
-export const AUGMENTATION_NEUROFLUX_GOVERNOR = "NeuroFlux Governor";
+export const AUGMENTATION_NEUROFLUX_GOVERNOR = 'NeuroFlux Governor';
+export const AUGMENTATION_DATA_JACK = 'DataJack';
+export const AUGMENTATION_NEMEAN_SUBDERMAL_WEAVE = 'NEMEAN Subdermal Weave';
 
 ////////
 //WORK//
 ////////
 export const WORK_TYPE_CLASS = 'CLASS';
+export const WORK_TYPE_COMPANY = 'COMPANY';
 export const WORK_TYPE_CRIME = 'CRIME';
 export const WORK_TYPE_FACTION = 'FACTION';
 

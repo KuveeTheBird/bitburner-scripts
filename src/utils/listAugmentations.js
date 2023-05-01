@@ -26,7 +26,9 @@ export async function main(ns) {
                 fromFaction: factionName,
                 repReq: singularity.getAugmentationRepReq(augmentation)
             };
-            augmentations.push(augmentationData);
+            if (!alreadyInstalled) {
+                augmentations.push(augmentationData);
+            }
         }
     }
 

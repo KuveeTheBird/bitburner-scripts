@@ -36,7 +36,7 @@ function scanServers(ns, scannedServers, attackableServers, hostname) {
         let attackableServer = new AttackableServer(ns, host);
         let weakenTimeCutoff = WEAKEN_TIME_CUTOFF_BASE;
         let hackLevelCutoffMultiplier = Math.floor(ns.getHackingLevel()/200);
-        hackLevelCutoffMultiplier = hackLevelCutoffMultiplier < 1 ? 0 : hackLevelCutoffMultiplier
+        hackLevelCutoffMultiplier = hackLevelCutoffMultiplier < 1 ? 1 : hackLevelCutoffMultiplier
         if (attackableServer.hasRootAccess && attackableServer.hackable && attackableServer.weakenTime < (weakenTimeCutoff * hackLevelCutoffMultiplier)) {
             attackableServers.push(attackableServer);
         }

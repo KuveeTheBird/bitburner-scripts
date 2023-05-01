@@ -13,6 +13,9 @@ export async function main(ns) {
     }
 
     let targetFaction = getNextTargetFaction(ns);
+    if (targetFaction === false) {
+        return;
+    }
 
     if (player.factions.includes(targetFaction)) {
         return;
