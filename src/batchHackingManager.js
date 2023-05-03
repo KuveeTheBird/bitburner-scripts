@@ -84,9 +84,10 @@ async function getBatchAttacksData(ns) {
     let batchAttacksData = [];
 
     let x = 0;
+    let maxBatchTime = -1;
     while (x < 20) {
         x++;
-        let batchAttackInformation = generateBatchAttackInformation(ns, attackableServers, botnetServerCollection);
+        let batchAttackInformation = generateBatchAttackInformation(ns, attackableServers, botnetServerCollection, maxBatchTime);
 
         if (!batchAttackInformation.length) {
             ns.printf('No more batch attack information');
@@ -101,6 +102,10 @@ async function getBatchAttacksData(ns) {
                 attackableServers.splice(i);
                 break;
             }
+        }
+
+        if (maxBatchTime === -1) {
+            maxBatchTime = currentBatchAttackInformation.totalBatchesTime;
         }
 
         batchAttacksData.push(currentBatchAttackInformation);

@@ -13,7 +13,12 @@ export async function main(ns) {
         let factionServer = FACTIONS_BACKDOOR_REQUIREMENTS[factionName];
         await backdoorServerIfPossible(ns, homeServer, factionServer);
     }
-    await backdoorServerIfPossible(ns, homeServer, SERVER_NAME_WORLD_DAEMON, true);
+
+    let wd = searchForServer(homeServer, SERVER_NAME_WORLD_DAEMON);
+    if (wd) {
+        ns.toast('AUTO ESCAPE IS DISABLED', 'warning');
+    }
+    // await backdoorServerIfPossible(ns, homeServer, SERVER_NAME_WORLD_DAEMON, true);
 }
 
 /**

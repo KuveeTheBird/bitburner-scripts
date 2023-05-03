@@ -1,13 +1,15 @@
 import {
-    HACKNET_BASE_PRODUCTION_THRESHOLD,
     HACKNET_UPGRADE_IMPROVE_GYM_TRAINING,
     HACKNET_UPGRADE_IMPROVE_STUDYING,
     HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY,
     HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY,
     HACKNET_UPGRADE_SELL_FOR_MONEY
 } from "/constants/Hacknet";
-import {SERVER_NAME_ECORP, SERVER_NAME_MEGACORP} from "/constants/ServerNames";
-import {ALLOWED_HASHNET_SPENDINGS} from "/settings/Settings";
+import {
+    ALLOWED_HASHNET_SPENDINGS,
+    ALLOWED_HASHNET_TARGETS,
+    HASHNET_BASE_PRODUCTION_THRESHOLD
+} from "/settings/Settings";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -57,7 +59,7 @@ function isProductionThresholdReached(ns) {
     let moneyMultiplier = multipliers.hacknet_node_money;
     let costMultiplier = 1 / ((multipliers.hacknet_node_ram_cost + multipliers.hacknet_node_purchase_cost + multipliers.hacknet_node_level_cost + multipliers.hacknet_node_core_cost) / 4);
 
-    let threshold = HACKNET_BASE_PRODUCTION_THRESHOLD * moneyMultiplier * costMultiplier;
+    let threshold = HASHNET_BASE_PRODUCTION_THRESHOLD * moneyMultiplier * costMultiplier;
 
     return calculateTotalProduction(ns) > threshold;
 }
@@ -95,15 +97,8 @@ function spendHashesOnBigUpgrades(ns) {
 
     let hacknet = ns.hacknet;
 
-    let possibleTargetServers = [
-        // SERVER_NAME_RHO_CONSTRUCTION,
-        // SERVER_NAME_4SIGMA,
-        // SERVER_NAME_OMNITEK,
-        SERVER_NAME_MEGACORP,
-        SERVER_NAME_ECORP,
-    ];
     let targetServers = [];
-    for (let server of possibleTargetServers) {
+    for (let server of ALLOWED_HASHNET_TARGETS) {
         if (ns.getServerMinSecurityLevel(server) > 1) {
             targetServers.push(server);
         }

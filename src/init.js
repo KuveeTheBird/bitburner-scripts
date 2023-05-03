@@ -14,7 +14,8 @@ import {
     SCRIPT_PATH_SINGULARITY_HANDLE_TRAVEL_PRE_REQUISITES,
     SCRIPT_PATH_SINGULARITY_INSTALL_AUGMENTS,
     SCRIPT_PATH_SINGULARITY_WORK_FOR_COMPANY,
-    SCRIPT_PATH_SINGULARITY_WORK_FOR_FACTION
+    SCRIPT_PATH_SINGULARITY_WORK_FOR_FACTION,
+    SCRIPT_PATH_SLEEVE_MANAGER
 } from '/constants/FileNames'
 import {TICK} from "/constants/BatchAttack";
 
@@ -27,6 +28,9 @@ export async function main(ns) {
         homeServerRam = ns.getServerMaxRam(SERVER_NAME_HOME);
 
         ns.exec(SCRIPT_PATH_NETWORK_DISCOVERY, SERVER_NAME_HOME);
+        await ns.asleep(TICK);
+
+        ns.exec(SCRIPT_PATH_SLEEVE_MANAGER, SERVER_NAME_HOME);
         await ns.asleep(TICK);
 
         ns.exec(SCRIPT_PATH_HASHNET_MANAGER, SERVER_NAME_HOME);

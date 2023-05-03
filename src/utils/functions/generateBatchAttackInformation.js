@@ -5,7 +5,7 @@ import {MIN_TIME_BETWEEN_ATTACKS_START} from "/settings/Settings";
  * @param {AttackableServer[]} attackableServers
  * @param {BotnetServerCollection} botnetServerCollection
  */
-export function generateBatchAttackInformation(ns, attackableServers, botnetServerCollection) {
+export function generateBatchAttackInformation(ns, attackableServers, botnetServerCollection, maxBatchTime) {
     let bestAttackParams = [];
 
     for (let attackableServer of attackableServers) {
@@ -13,7 +13,7 @@ export function generateBatchAttackInformation(ns, attackableServers, botnetServ
         let hackRatio = 0.95;
         let bestAttackParam;
         while (hackRatio > 0) {
-            let attackParams = generateBatchAttackInformationForAttackableServerAndHackRatio(attackableServer, botnetServerCollection, hackRatio)
+            let attackParams = generateBatchAttackInformationForAttackableServerAndHackRatio(attackableServer, botnetServerCollection, hackRatio, maxBatchTime)
             if (!bestAttackParam || attackParams.moneyPerSec > bestAttackParam.moneyPerSec) {
                 bestAttackParam = attackParams;
             }
@@ -38,7 +38,7 @@ export function generateBatchAttackInformation(ns, attackableServers, botnetServ
  * @param {number} hackRatio
  * @return {{hackWeakenThreads: (*|number), timeBetweenAttacksStart: number, hackThreads: (*|number), moneyPerSec: number, availableBatchCapacity: number, moneyPerBatch: number, growWeakenThreads: (*|number), weakenTime: (*|((server: Server, player: Person) => number)), batchThreads: *, secondsBetweenAttacksStart: number, hackTime: (*|((server: Server, player: Person) => number)), moneyMillionPerSec: string, growTime: (*|((server: Server, player: Person) => number)), growThreads: (*|number)}}
  */
-function generateBatchAttackInformationForAttackableServerAndHackRatio(attackableServer, botnetServerCollection, hackRatio) {
+function generateBatchAttackInformationForAttackableServerAndHackRatio(attackableServer, botnetServerCollection, hackRatio, maxBatchTime) {
     let growThreads = attackableServer.calculateReGrowThreads(hackRatio);
     let hackThreads = attackableServer.calculateHackThreads(hackRatio);
     let growWeakenThreads = attackableServer.calculateReGrowWeakenThreads(hackRatio);
@@ -59,11 +59,22 @@ function generateBatchAttackInformationForAttackableServerAndHackRatio(attackabl
         timeBetweenAttacksStart = Math.ceil(weakenTime / (--availableBatchCapacity));
     }
 
+    let totalBatchesTime = weakenTime + ((availableBatchCapacity - 1) * timeBetweenAttacksStart);
+    if (maxBatchTime > -1) {
+        while (totalBatchesTime > maxBatchTime) {
+            availableBatchCapacity -= 1;
+            if (availableBatchCapacity <= 0) {
+                return;
+            }
+            totalBatchesTime = weakenTime + ((availableBatchCapacity - 1) * timeBetweenAttacksStart);
+        }
+    }
+
+
     let totalBatchThreads = availableBatchCapacity * batchThreads;
     let secondsBetweenAttacksStart = timeBetweenAttacksStart / 1000;
     let moneyPerBatch = attackableServer.maxMoney * hackRatio;
     let totalBatchesMoney = (moneyPerBatch * availableBatchCapacity);
-    let totalBatchesTime = weakenTime + ((availableBatchCapacity - 1) * timeBetweenAttacksStart);
     let totalBatchesSeconds = totalBatchesTime / 1000;
     let moneyPerSec = totalBatchesMoney / totalBatchesSeconds;
     let moneyMillionPerSec = Math.round(moneyPerSec / 1000 / 1000) + 'm$';
@@ -85,6 +96,7 @@ function generateBatchAttackInformationForAttackableServerAndHackRatio(attackabl
         'timeBetweenAttacksStart': timeBetweenAttacksStart,
         'secondsBetweenAttacksStart': secondsBetweenAttacksStart,
         'totalBatchesMoney': totalBatchesMoney,
+        'totalBatchesTime': totalBatchesTime,
         'totalBatchesSeconds': totalBatchesSeconds,
         'moneyPerSec': moneyPerSec,
         'moneyMillionPerSec': moneyMillionPerSec,

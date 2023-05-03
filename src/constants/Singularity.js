@@ -4,6 +4,7 @@ export const FACTION_DONATE_MONEY_SAFETY_MARGIN = 3;
 export const AUGMENTATION_NEUROFLUX_GOVERNOR = 'NeuroFlux Governor';
 export const AUGMENTATION_DATA_JACK = 'DataJack';
 export const AUGMENTATION_NEMEAN_SUBDERMAL_WEAVE = 'NEMEAN Subdermal Weave';
+export const AUGMENTATION_NEURALSTIMULATOR = 'Neuralstimulator';
 
 ////////
 //WORK//
