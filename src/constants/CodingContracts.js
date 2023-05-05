@@ -1,9 +1,11 @@
 export const CODING_CONTRACT_SOLVERS_BASEPATH = 'utils/coding_contracts/';
 
 export const CODING_CONTRACT_SOLVERS = {
+    'Find Largest Prime Factor': 'find_largest_prime_factor.js',
+    'Subarray with Maximum Sum': 'subarray_with_maximum_sum.js',
+
     'Merge Overlapping Intervals': 'merge_overlapping_intervals.js',
     'Spiralize Matrix': 'spiralize_matrix.js',
-    'Find Largest Prime Factor': 'find_largest_prime_factor.js',
     'Generate IP Addresses': 'generate_ip_addresses.js',
     'Unique Paths in a Grid I': 'unique_paths_in_a_grid_i.js',
     'Unique Paths in a Grid II': 'unique_paths_in_a_grid_ii.js',
