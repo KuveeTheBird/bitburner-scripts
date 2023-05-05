@@ -3,6 +3,7 @@ import {gatherBotnetServers} from "/utils/functions/gatherBotnetServers";
 import {generateBatchAttackInformation} from "/utils/functions/generateBatchAttackInformation";
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
 import {TICK} from "/constants/BatchAttack";
+import {FILE_PATH_TARGET_SERVER} from "/constants/FileNames";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -94,6 +95,11 @@ async function getBatchAttacksData(ns) {
             break;
         }
         let currentBatchAttackInformation = batchAttackInformation[0];
+
+        if (x === 1) {
+            ns.toast(ns.sprintf('Primary hacking target: %s, profit: %d M/s', currentBatchAttackInformation.name, currentBatchAttackInformation.moneyMillionPerSec));
+            ns.write(FILE_PATH_TARGET_SERVER, currentBatchAttackInformation.name, 'w');
+        }
 
         ns.printf('#%s Reserving for %s', x, currentBatchAttackInformation.name);
         currentBatchAttackInformation.batchReservations = botnetServerCollection.reserveBatches(currentBatchAttackInformation.availableBatchCapacity, currentBatchAttackInformation.batchThreads);

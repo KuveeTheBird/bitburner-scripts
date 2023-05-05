@@ -8,7 +8,11 @@ import {
     WORK_TYPE_CLASS
 } from "/constants/Singularity";
 import {getNextTargetFaction} from "/utils/functions/singularity/getNextTargetFaction";
-import {FACTIONS_BATTLE_STAT_REQUIREMENTS, FACTIONS_HACKING_STAT_REQUIREMENTS} from "/constants/Factions";
+import {
+    FACTIONS_BACKDOOR_REQUIREMENTS,
+    FACTIONS_BATTLE_STAT_REQUIREMENTS,
+    FACTIONS_HACKING_STAT_REQUIREMENTS
+} from "/constants/Factions";
 
 
 /** @param {import(".").NS } ns */
@@ -32,7 +36,9 @@ export async function main(ns) {
         targetChaLevel = 500;
     }
 
-    if (nextTarget !== false && Object.keys(FACTIONS_HACKING_STAT_REQUIREMENTS).includes(nextTarget)) {
+    if (nextTarget !== false && Object.keys(FACTIONS_BACKDOOR_REQUIREMENTS).includes(nextTarget)) {
+        targetHackingLevel = Math.max(targetHackingLevel, ns.getServerRequiredHackingLevel(FACTIONS_BACKDOOR_REQUIREMENTS[nextTarget]));
+    } else if (nextTarget !== false && Object.keys(FACTIONS_HACKING_STAT_REQUIREMENTS).includes(nextTarget)) {
         targetHackingLevel = Math.max(targetHackingLevel, FACTIONS_HACKING_STAT_REQUIREMENTS[nextTarget]);
     }
 

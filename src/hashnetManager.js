@@ -5,11 +5,9 @@ import {
     HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY,
     HACKNET_UPGRADE_SELL_FOR_MONEY
 } from "/constants/Hacknet";
-import {
-    ALLOWED_HASHNET_SPENDINGS,
-    ALLOWED_HASHNET_TARGETS,
-    HASHNET_BASE_PRODUCTION_THRESHOLD
-} from "/settings/Settings";
+import {ALLOWED_HASHNET_SPENDINGS, HASHNET_BASE_PRODUCTION_THRESHOLD} from "/settings/Settings";
+import {SERVER_NAME_HOME} from "/constants/ServerNames";
+import {FILE_PATH_TARGET_SERVER, FILE_SQLINJECT} from "/constants/FileNames";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -19,7 +17,7 @@ export async function main(ns) {
 
     spendHashes(ns);
 
-    if (isProductionThresholdReached(ns)) {
+    if (isProductionThresholdReached(ns) || !ns.fileExists(FILE_SQLINJECT, SERVER_NAME_HOME)) {
         return;
     }
 
@@ -97,12 +95,12 @@ function spendHashesOnBigUpgrades(ns) {
 
     let hacknet = ns.hacknet;
 
-    let targetServers = [];
-    for (let server of ALLOWED_HASHNET_TARGETS) {
-        if (ns.getServerMinSecurityLevel(server) > 1) {
-            targetServers.push(server);
-        }
+    let targetServer = ns.fileExists(FILE_PATH_TARGET_SERVER) ? ns.read(FILE_PATH_TARGET_SERVER) : false;
+    let weakenTargetServer = false;
+    if (targetServer && ns.getServerMinSecurityLevel(targetServer) > 1) {
+        weakenTargetServer = true;
     }
+    // ns.toast(targetServer);
 
     let hashCosts = [];
     for (let hashItem of ALLOWED_HASHNET_SPENDINGS) {
@@ -110,20 +108,57 @@ function spendHashesOnBigUpgrades(ns) {
     }
     let minHashCost = Math.min(...hashCosts);
     if (hacknet.hashCapacity() > minHashCost) {
-        if (ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_IMPROVE_STUDYING) && hacknet.numHashes() > hacknet.hashCost(HACKNET_UPGRADE_IMPROVE_STUDYING)) {
-            hacknet.spendHashes(HACKNET_UPGRADE_IMPROVE_STUDYING);
+        let hashCost = 0;
+
+        hashCost = hacknet.hashCost(HACKNET_UPGRADE_IMPROVE_STUDYING);
+        if (
+            ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_IMPROVE_STUDYING)
+            && hacknet.numHashes() > hashCost
+        ) {
+            if (hacknet.spendHashes(HACKNET_UPGRADE_IMPROVE_STUDYING)) {
+                ns.toast(
+                    ns.sprintf('Spent %d hashes to improve studying', hashCost)
+                );
+            }
         }
 
-        if (ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_IMPROVE_GYM_TRAINING) && hacknet.numHashes() > hacknet.hashCost(HACKNET_UPGRADE_IMPROVE_GYM_TRAINING)) {
-            hacknet.spendHashes(HACKNET_UPGRADE_IMPROVE_GYM_TRAINING);
+        hashCost = hacknet.hashCost(HACKNET_UPGRADE_IMPROVE_GYM_TRAINING);
+        if (
+            ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_IMPROVE_GYM_TRAINING)
+            && hacknet.numHashes() > hashCost
+        ) {
+            if (hacknet.spendHashes(HACKNET_UPGRADE_IMPROVE_GYM_TRAINING)) {
+                ns.toast(
+                    ns.sprintf('Spent %d hashes to improve gym training', hashCost)
+                );
+            }
         }
 
-        if (ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY) && targetServers.length && hacknet.numHashes() > hacknet.hashCost(HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY)) {
-            hacknet.spendHashes(HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY, targetServers[0]);
+        hashCost = hacknet.hashCost(HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY);
+        if (
+            ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY)
+            && targetServer
+            && weakenTargetServer
+            && hacknet.numHashes() > hashCost
+        ) {
+            if (hacknet.spendHashes(HACKNET_UPGRADE_REDUCE_MINIMUM_SECURITY, targetServer)) {
+                ns.toast(
+                    ns.sprintf('Spent %d hashes to reduce security of: %s', hashCost, targetServer)
+                );
+            }
         }
 
-        if (ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY) && targetServers.length && hacknet.numHashes() > hacknet.hashCost(HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY)) {
-            hacknet.spendHashes(HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY, targetServers[0]);
+        hashCost = hacknet.hashCost(HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY);
+        if (
+            ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY)
+            && targetServer
+            && hacknet.numHashes() > hashCost
+        ) {
+            if (hacknet.spendHashes(HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY, targetServer)) {
+                ns.toast(
+                    ns.sprintf('Spent %d hashes to increase maximum money of: %s', hashCost, targetServer)
+                );
+            }
         }
 
         return true;

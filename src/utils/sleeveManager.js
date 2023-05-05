@@ -22,12 +22,12 @@ export async function main(ns) {
         let sleeveTask = sleeve.getTask(sleeveNumber);
         buyAugments(ns, sleeveNumber);
 
-        if (sleevePerson.sync < 66) {
-            if (!sleeveTask || sleeveTask.type !== 'SYNCHRO') {
-                sleeve.setToSynchronize(sleeveNumber);
-            }
-            return;
-        }
+        // if (sleevePerson.sync < 100) {
+        //     if (!sleeveTask || sleeveTask.type !== 'SYNCHRO') {
+        //         sleeve.setToSynchronize(sleeveNumber);
+        //     }
+        //     return;
+        // }
 
         if (sleevePerson.shock > SLEEVE_SHOCK_THRESHOLD) {
             if (!sleeveTask || sleeveTask.type !== 'RECOVERY') {

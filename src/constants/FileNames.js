@@ -24,7 +24,11 @@ export const SCRIPT_PATH_SINGULARITY_INSTALL_AUGMENTS = SCRIPT_SINGULARITY_BASE_
 export const SCRIPT_PATH_SINGULARITY_DONATE_TO_FACTION = SCRIPT_SINGULARITY_BASE_PATH + 'donateToFaction.js';
 // export const SCRIPT_PATH_SINGULARITY_ = SCRIPT_SINGULARITY_BASE_PATH + 'xxxxxx';
 
-/////////////////////
+//////////////
+//FILE PATHS//
+//////////////
+export const FILE_PATH_TARGET_SERVER = 'targetServer.txt';
+
 //STANDARD PROGRAMS//
 /////////////////////
 export const FILE_BRUTESSH = "BruteSSH.exe";
