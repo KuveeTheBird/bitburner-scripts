@@ -10,24 +10,17 @@ export async function main(ns) {
 }
 
 function getSolution(data) {
-    const codeOfA = 65;
     const charArray = data[0].split('');
-    const keyArray = data[1].split('');
-    const keyLength = keyArray.length;
+    const keyDiff = -1 * data[1];
 
     let resultArray = [];
 
-    for (let charPosition = 0; charPosition < charArray.length; charPosition++) {
-        let charToEncrypt = charArray[charPosition];
-        let keyPosition = charPosition;
-        while (keyPosition >= keyLength) {
-            keyPosition -= keyLength;
+    for (let charToEncrypt of charArray) {
+        if (charToEncrypt === ' ') {
+            resultArray.push(charToEncrypt);
+        } else {
+            resultArray.push(shiftLetterBy(charToEncrypt, keyDiff));
         }
-        let keyChar = keyArray[keyPosition];
-        let keyDiff = keyChar.charCodeAt(0) - codeOfA;
-
-
-        resultArray.push(shiftLetterBy(charToEncrypt, keyDiff));
     }
 
     return resultArray.join('');
