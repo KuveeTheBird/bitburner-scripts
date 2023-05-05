@@ -12,4 +12,5 @@ export const CODING_CONTRACT_SOLVERS = {
     'Algorithmic Stock Trader II': 'algorithmic_stock_trader_ii.js',
     'Algorithmic Stock Trader III': 'algorithmic_stock_trader_iii.js',
     'Algorithmic Stock Trader IV': 'algorithmic_stock_trader_iv.js',
+    'Encryption II: Vigenère Cipher': 'encryption_ii_vigenere_cipher.js',
 };

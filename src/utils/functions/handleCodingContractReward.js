@@ -19,7 +19,7 @@ export function handleCodingContractReward(ns, solution, filePath, serverName) {
             'Failed to complete coding contract, remaining tries: %d',
             ns.codingcontract.getNumTriesRemaining(filePath, serverName)
         );
-        ns.toast(failureMessage, 'danger');
+        ns.toast(failureMessage, 'error');
         ns.tprint(failureMessage);
     }
 }
