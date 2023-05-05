@@ -1,4 +1,5 @@
 import {
+    HACKNET_UPGRADE_GENERATE_CODING_CONTRACT,
     HACKNET_UPGRADE_IMPROVE_GYM_TRAINING,
     HACKNET_UPGRADE_IMPROVE_STUDYING,
     HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY,
@@ -157,6 +158,19 @@ function spendHashesOnBigUpgrades(ns) {
             if (hacknet.spendHashes(HACKNET_UPGRADE_INCREASE_MAXIMUM_MONEY, targetServer)) {
                 ns.toast(
                     ns.sprintf('Spent %d hashes to increase maximum money of: %s', hashCost, targetServer)
+                );
+            }
+        }
+
+        hashCost = hacknet.hashCost(HACKNET_UPGRADE_GENERATE_CODING_CONTRACT);
+        if (
+            ALLOWED_HASHNET_SPENDINGS.includes(HACKNET_UPGRADE_GENERATE_CODING_CONTRACT)
+            && targetServer
+            && hacknet.numHashes() > hashCost
+        ) {
+            if (hacknet.spendHashes(HACKNET_UPGRADE_GENERATE_CODING_CONTRACT, targetServer)) {
+                ns.toast(
+                    ns.sprintf('Spent %d hashes to generate coding contract', hashCost)
                 );
             }
         }

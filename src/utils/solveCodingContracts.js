@@ -17,5 +17,14 @@ function handleContract(ns, serverName, filePath) {
     if (Object.keys(CODING_CONTRACT_SOLVERS).includes(contractType)) {
         let fileToRun = CODING_CONTRACT_SOLVERS_BASEPATH + CODING_CONTRACT_SOLVERS[contractType];
         ns.run(fileToRun, 1, serverName, filePath);
+    } else {
+        ns.tprint(
+            ns.sprintf(
+                'No solver file found for: %s / %s - %s',
+                serverName,
+                filePath,
+                cc.getContractType(filePath, serverName)
+            )
+        );
     }
 }
