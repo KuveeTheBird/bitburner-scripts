@@ -4,6 +4,7 @@ import {generateBatchAttackInformation} from "/utils/functions/generateBatchAtta
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
 import {TICK} from "/constants/BatchAttack";
 import {FILE_PATH_TARGET_SERVER} from "/constants/FileNames";
+import {findCodingContracts} from "/utils/functions/findCodingContracts";
 
 /** @param {NS} ns */
 export async function main(ns) {
@@ -24,6 +25,17 @@ export async function main(ns) {
             }
         }
 
+        let codingContracts = findCodingContracts(ns);
+
+        if (codingContracts.length) {
+            ns.toast('Will try to solve coding contracts');
+            //START SHARE EVERYWHERE
+
+            //RUN SOLVE CODING CONTRACTS
+            //WAIT UNTIL SOLVE CODING CONTRACTS FINISHES
+
+            //KILL SHARE EVERYWHERE
+        }
 
         let batchAttacksData = await getBatchAttacksData(ns);
 
@@ -97,7 +109,7 @@ async function getBatchAttacksData(ns) {
         let currentBatchAttackInformation = batchAttackInformation[0];
 
         if (x === 1) {
-            ns.toast(ns.sprintf('Primary hacking target: %s, profit: %d M/s', currentBatchAttackInformation.name, currentBatchAttackInformation.moneyMillionPerSec));
+            ns.toast(ns.sprintf('Primary hacking target: %s, profit: %s M/s', currentBatchAttackInformation.name, currentBatchAttackInformation.moneyMillionPerSec));
             ns.write(FILE_PATH_TARGET_SERVER, currentBatchAttackInformation.name, 'w');
         }
 
