@@ -57,8 +57,9 @@ function isProductionThresholdReached(ns) {
     let multipliers = ns.getPlayer().mults;
     let moneyMultiplier = multipliers.hacknet_node_money;
     let costMultiplier = 1 / ((multipliers.hacknet_node_ram_cost + multipliers.hacknet_node_purchase_cost + multipliers.hacknet_node_level_cost + multipliers.hacknet_node_core_cost) / 4);
+    let bitnodeMultiplier = ns.getBitNodeMultipliers().HacknetNodeMoney;
 
-    let threshold = HASHNET_BASE_PRODUCTION_THRESHOLD * moneyMultiplier * costMultiplier;
+    let threshold = HASHNET_BASE_PRODUCTION_THRESHOLD * moneyMultiplier * costMultiplier * bitnodeMultiplier;
 
     return calculateTotalProduction(ns) > threshold;
 }

@@ -19,6 +19,9 @@ export async function main(ns) {
 
         if (ns.isRunning(preparationPid)) {
             ns.printf('Waiting for preparation to end, pid: %s', preparationPid);
+            if (ns.fileExists(FILE_PATH_TARGET_SERVER, SERVER_NAME_HOME)) {
+                ns.rm(FILE_PATH_TARGET_SERVER, SERVER_NAME_HOME);
+            }
 
             while (ns.isRunning(preparationPid)) {
                 await ns.asleep(1000);

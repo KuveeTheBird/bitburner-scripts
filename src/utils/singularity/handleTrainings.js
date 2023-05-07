@@ -22,19 +22,34 @@ export async function main(ns) {
     let skills = player.skills;
     let nextTarget = getNextTargetFaction(ns);
 
-    let targetHackingLevel = TRAINING_BASE_STAT * player.mults.hacking_exp * player.mults.hacking;
-    let targetChaLevel = TRAINING_BASE_STAT * player.mults.charisma * player.mults.charisma_exp;
-    let targetStrLevel = TRAINING_BASE_STAT * player.mults.strength * player.mults.strength_exp;
-    let targetDefLevel = TRAINING_BASE_STAT * player.mults.defense * player.mults.defense_exp;
-    let targetDexLevel = TRAINING_BASE_STAT * player.mults.dexterity * player.mults.dexterity_exp;
-    let targetAgiLevel = TRAINING_BASE_STAT * player.mults.agility * player.mults.agility_exp;
+    let bitNodeMultipliers = ns.getBitNodeMultipliers();
 
-    if (targetHackingLevel > 3000) {
-        targetHackingLevel = 3000;
-    }
-    if (targetChaLevel > 500) {
-        targetChaLevel = 500;
-    }
+    // ns.tprint(bitNodeMultipliers);
+
+    let hackingMultiplier = player.mults.hacking * bitNodeMultipliers.HackingLevelMultiplier;
+    let hackingExpMultiplier = player.mults.hacking_exp * bitNodeMultipliers.HackExpGain;
+    let targetHackingLevel = TRAINING_BASE_STAT * hackingExpMultiplier * hackingMultiplier;
+
+    let charismaMultiplier = player.mults.charisma * bitNodeMultipliers.CharismaLevelMultiplier;
+    let charismaExpMultiplier = player.mults.charisma_exp;
+    let targetChaLevel = TRAINING_BASE_STAT * charismaMultiplier * charismaExpMultiplier;
+
+    let strengthMultiplier = player.mults.strength * bitNodeMultipliers.StrengthLevelMultiplier;
+    let strengthExpMultiplier = player.mults.strength_exp;
+    let targetStrLevel = TRAINING_BASE_STAT * strengthMultiplier * strengthExpMultiplier;
+
+    let defenseMultiplier = player.mults.defense * bitNodeMultipliers.DefenseLevelMultiplier;
+    let defenseExpMultiplier = player.mults.defense_exp;
+    let targetDefLevel = TRAINING_BASE_STAT * defenseMultiplier * defenseExpMultiplier;
+
+    let dexterityMultiplier = player.mults.dexterity * bitNodeMultipliers.DexterityLevelMultiplier;
+    let dexterityExpMultiplier = player.mults.dexterity_exp;
+    let targetDexLevel = TRAINING_BASE_STAT * dexterityMultiplier * dexterityExpMultiplier;
+
+    let agilityMultiplier = player.mults.agility * bitNodeMultipliers.AgilityLevelMultiplier;
+    let agilityExpMultiplier = player.mults.agility_exp;
+    let targetAgiLevel = TRAINING_BASE_STAT * agilityMultiplier * agilityExpMultiplier;
+
 
     if (nextTarget !== false && Object.keys(FACTIONS_BACKDOOR_REQUIREMENTS).includes(nextTarget)) {
         targetHackingLevel = Math.max(targetHackingLevel, ns.getServerRequiredHackingLevel(FACTIONS_BACKDOOR_REQUIREMENTS[nextTarget]));
