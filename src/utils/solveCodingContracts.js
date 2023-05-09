@@ -3,6 +3,8 @@ import {CODING_CONTRACT_SOLVERS, CODING_CONTRACT_SOLVERS_BASEPATH} from "/consta
 
 /** @param {NS} ns */
 export async function main(ns) {
+    // ns.codingcontract.createDummyContract('Total Ways to Sum');
+
     let codingContracts = findCodingContracts(ns);
 
     for (let codingContract of codingContracts) {

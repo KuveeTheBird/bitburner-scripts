@@ -14,11 +14,11 @@ export async function main(ns) {
         await backdoorServerIfPossible(ns, homeServer, factionServer);
     }
 
-    let wd = searchForServer(homeServer, SERVER_NAME_WORLD_DAEMON);
-    if (wd) {
-        ns.toast('AUTO ESCAPE IS DISABLED', 'warning');
-    }
-    // await backdoorServerIfPossible(ns, homeServer, SERVER_NAME_WORLD_DAEMON, true);
+    // let wd = searchForServer(homeServer, SERVER_NAME_WORLD_DAEMON);
+    // if (wd) {
+    //     ns.toast('AUTO ESCAPE IS DISABLED', 'warning');
+    // }
+    await backdoorServerIfPossible(ns, homeServer, SERVER_NAME_WORLD_DAEMON, true);
 }
 
 /**

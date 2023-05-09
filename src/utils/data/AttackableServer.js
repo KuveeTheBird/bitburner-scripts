@@ -68,15 +68,18 @@ export class AttackableServer {
     }
 
     get weakenTime() {
-        return this.#ns.getWeakenTime(this.name);
+        let weakenTime = this.#ns.getWeakenTime(this.name);
+        return weakenTime > 0 ? weakenTime : 1;
     }
 
     get growTime() {
-        return this.#ns.getGrowTime(this.name);
+        let growTime = this.#ns.getGrowTime(this.name);
+        return growTime > 0 ? growTime : 1;
     }
 
     get hackTime() {
-        return this.#ns.getHackTime(this.name);
+        let hackTime = this.#ns.getHackTime(this.name);
+        return hackTime > 0 ? hackTime : 1;
     }
 
 
@@ -104,12 +107,13 @@ export class AttackableServer {
     }
 
     calculateReGrowThreads(hackRatio) {
-        return Math.ceil(
+        let growThreads = Math.ceil(
             this.#ns.growthAnalyze(
                 this.name,
                 1 / (1 - (hackRatio))
             )
         );
+        return growThreads > 0 ? growThreads : 1;
     }
 
     calculateReGrowSecurityIncrease(hackRatio) {
@@ -117,11 +121,13 @@ export class AttackableServer {
     }
 
     calculateReGrowWeakenThreads(hackRatio) {
-        return Math.ceil((this.calculateReGrowSecurityIncrease(hackRatio) / this.#ns.weakenAnalyze(1)) * 1.1 );
+        let growWeakenThreads = Math.ceil((this.calculateReGrowSecurityIncrease(hackRatio) / this.#ns.weakenAnalyze(1)) * 1.1 );
+        return growWeakenThreads > 0 ? growWeakenThreads : 1;
     }
 
     calculateHackThreads(hackRatio) {
-        return Math.floor(hackRatio / this.hackAnalyze());
+        let hackThreads = Math.floor(hackRatio / this.hackAnalyze());
+        return hackThreads > 0 ? hackThreads : 1;
     }
 
     calculateHackSecurityIncrease(hackRatio) {
@@ -129,6 +135,7 @@ export class AttackableServer {
     }
 
     calculateHackWeakenThreads(hackRatio) {
-        return Math.ceil((this.calculateHackSecurityIncrease(hackRatio) / this.#ns.weakenAnalyze(1)) * 1.1);
+        let hackWeakenThreads = Math.ceil((this.calculateHackSecurityIncrease(hackRatio) / this.#ns.weakenAnalyze(1)) * 1.1);
+        return hackWeakenThreads > 0 ? hackWeakenThreads : 1;
     }
 }

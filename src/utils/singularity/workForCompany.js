@@ -4,8 +4,11 @@ import {WORK_TYPE_CLASS, WORK_TYPE_COMPANY, WORK_TYPE_FACTION} from "/constants/
 
 /** @param {import(".").NS } ns */
 export async function main(ns) {
+    let player = ns.getPlayer();
     let singularity = ns.singularity;
     let nextTarget = getNextTargetFaction(ns);
+    let hackStats = player.skills.hacking;
+    let securityStats = (player.skills.strength + player.skills.agility + player.skills.defense + player.skills.dexterity) / 4
 
     if (nextTarget === false || ns.getPlayer().factions.includes(nextTarget)) {
         return;
@@ -27,8 +30,15 @@ export async function main(ns) {
 
 
 
-
-    singularity.applyToCompany(company, 'software');
+    if (hackStats > securityStats) {
+        if (!singularity.applyToCompany(company, 'software')) {
+            singularity.applyToCompany(company, 'security');
+        }
+    } else {
+        if (!singularity.applyToCompany(company, 'security')) {
+            singularity.applyToCompany(company, 'software');
+        }
+    }
 
     if (currentWork && currentWork.type === WORK_TYPE_COMPANY && currentWork.companyName === company) {
         if (singularity.getCompanyRep(company) >= 400000) {

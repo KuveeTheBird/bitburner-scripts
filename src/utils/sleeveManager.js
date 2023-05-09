@@ -1,11 +1,13 @@
 import {
     COURSE_ALGORITHMS,
     COURSE_LEADERSHIP,
+    CRIME_HOMICIDE,
     CRIME_MUG,
     LOCATION_POWERHOUSE_GYM,
     LOCATION_ROTHMAN_UNIVERSITY,
     TRAINING_BASE_STAT,
     WORK_TYPE_CLASS,
+    WORK_TYPE_COMPANY,
     WORK_TYPE_FACTION
 } from "/constants/Singularity";
 import {SLEEVE_SHOCK_THRESHOLD} from "/settings/Settings";
@@ -20,35 +22,45 @@ export async function main(ns) {
     for (let sleeveNumber = 0; sleeveNumber < numSleeves ; sleeveNumber++) {
         let sleevePerson = sleeve.getSleeve(sleeveNumber);
         let sleeveTask = sleeve.getTask(sleeveNumber);
-        buyAugments(ns, sleeveNumber);
+        if (sleevePerson.shock <= 0) {
+            buyAugments(ns, sleeveNumber);
+        }
 
         // if (sleevePerson.sync < 100) {
         //     if (!sleeveTask || sleeveTask.type !== 'SYNCHRO') {
         //         sleeve.setToSynchronize(sleeveNumber);
         //     }
-        //     return;
+        //     continue;
         // }
 
         if (sleevePerson.shock > SLEEVE_SHOCK_THRESHOLD) {
             if (!sleeveTask || sleeveTask.type !== 'RECOVERY') {
                 sleeve.setToShockRecovery(sleeveNumber);
             }
-            return;
+            continue;
 
         }
 
         if (handleTrainings(ns, sleeveNumber)) {
-            return;
+            continue;
         }
 
-        if (currentWork && currentWork.type === WORK_TYPE_FACTION) {
-            if (!sleeveTask || sleeveTask.type !== currentWork.type || sleeveTask.factionName !== currentWork.factionName || sleeveTask.factionWorkType !== currentWork.factionWorkType) {
-                sleeve.setToFactionWork(sleeveNumber, currentWork.factionName, currentWork.factionWorkType);
+        if (sleeveNumber === 0) {
+            if (currentWork && currentWork.type === WORK_TYPE_FACTION) {
+                if (!sleeveTask || sleeveTask.type !== currentWork.type || sleeveTask.factionName !== currentWork.factionName || sleeveTask.factionWorkType !== currentWork.factionWorkType) {
+                    sleeve.setToFactionWork(sleeveNumber, currentWork.factionName, currentWork.factionWorkType);
+                }
+                continue;
             }
-            return;
+            if (currentWork && currentWork.type === WORK_TYPE_COMPANY) {
+                if (!sleeveTask || sleeveTask.type !== currentWork.type || sleeveTask.companyName !== currentWork.companyName) {
+                    sleeve.setToCompanyWork(sleeveNumber, currentWork.companyName)
+                }
+                continue;
+            }
         }
 
-        sleeve.setToCommitCrime(sleeveNumber, CRIME_MUG);
+        commitCrime(ns, sleeveNumber);
     }
 }
 
@@ -62,13 +74,14 @@ function handleTrainings(ns, sleeveNumber) {
     let singularity = ns.singularity;
     let currentWork = singularity.getCurrentWork();
 
+    let bitNodeMultipliers = ns.getBitNodeMultipliers();
     let trainingBaseStat = TRAINING_BASE_STAT * 2;
-    let targetHackingLevel = trainingBaseStat * mults.hacking_exp * mults.hacking;
-    let targetChaLevel = trainingBaseStat * mults.charisma * mults.charisma_exp;
-    let targetStrLevel = trainingBaseStat * mults.strength * mults.strength_exp;
-    let targetDexLevel = trainingBaseStat * mults.dexterity * mults.dexterity_exp;
-    let targetDefLevel = trainingBaseStat * mults.defense * mults.defense_exp;
-    let targetAgiLevel = trainingBaseStat * mults.agility * mults.agility_exp;
+    let targetHackingLevel = trainingBaseStat * mults.hacking_exp * mults.hacking * bitNodeMultipliers.HackingLevelMultiplier;
+    let targetChaLevel = trainingBaseStat * mults.charisma * mults.charisma_exp * bitNodeMultipliers.CharismaLevelMultiplier;
+    let targetStrLevel = trainingBaseStat * mults.strength * mults.strength_exp * bitNodeMultipliers.StrengthLevelMultiplier;
+    let targetDexLevel = trainingBaseStat * mults.dexterity * mults.dexterity_exp * bitNodeMultipliers.DexterityLevelMultiplier;
+    let targetDefLevel = trainingBaseStat * mults.defense * mults.defense_exp * bitNodeMultipliers.DefenseLevelMultiplier;
+    let targetAgiLevel = trainingBaseStat * mults.agility * mults.agility_exp * bitNodeMultipliers.AgilityLevelMultiplier;
 
     if (sleevePerson.skills.hacking < targetHackingLevel || (currentWork && currentWork.type === WORK_TYPE_CLASS && currentWork.classType === COURSE_ALGORITHMS)) {
         sleeve.setToUniversityCourse(sleeveNumber, LOCATION_ROTHMAN_UNIVERSITY, COURSE_ALGORITHMS);
@@ -106,4 +119,19 @@ function buyAugments(ns, sleeveNumber) {
             sleeve.purchaseSleeveAug(sleeveNumber, aug.name);
         }
     }
+}
+
+function commitCrime(ns, sleeveNumber) {
+    let sleeve = ns.sleeve;
+    let sleevePerson = sleeve.getSleeve(sleeveNumber);
+    let sleeveSkills = sleevePerson.skills;
+
+    let averageCombatStats = Math.floor((sleeveSkills.strength + sleeveSkills.defense + sleeveSkills.dexterity + sleeveSkills.agility) / 4);
+
+    if (averageCombatStats > 75) {
+        sleeve.setToCommitCrime(sleeveNumber, CRIME_HOMICIDE);
+    } else {
+        sleeve.setToCommitCrime(sleeveNumber, CRIME_MUG);
+    }
+
 }

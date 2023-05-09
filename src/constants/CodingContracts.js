@@ -3,6 +3,7 @@ export const CODING_CONTRACT_SOLVERS_BASEPATH = 'utils/coding_contracts/';
 export const CODING_CONTRACT_SOLVERS = {
     'Find Largest Prime Factor': 'find_largest_prime_factor.js',
     'Subarray with Maximum Sum': 'subarray_with_maximum_sum.js',
+    'Total Ways to Sum': 'total_ways_to_sum.js',
 
     'Merge Overlapping Intervals': 'merge_overlapping_intervals.js',
     'Spiralize Matrix': 'spiralize_matrix.js',

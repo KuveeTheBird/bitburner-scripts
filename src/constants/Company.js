@@ -7,4 +7,4 @@ export const COMPANY_NAME_BLADE_INDUSTRIES = 'Blade Industries';
 export const COMPANY_NAME_OMNITEK_INCORPORATED = 'OmniTek Incorporated';
 export const COMPANY_NAME_BACHMAN_AND_ASSOCIATES = 'Bachman & Associates';
 export const COMPANY_NAME_CLARKE_INCORPORATED = 'Clarke Incorporated';
-export const COMPANY_NAME_FULCRUM_SECRET_TECHNOLOGIES = 'Fulcrum Secret Technologies';
+export const COMPANY_NAME_FULCRUM_TECHNOLOGIES = 'Fulcrum Technologies';
