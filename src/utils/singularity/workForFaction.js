@@ -9,6 +9,7 @@ export async function main(ns) {
     let currentWork = singularity.getCurrentWork();
     let targetFaction = getNextTargetFaction(ns);
     if (targetFaction === false) {
+        tryToAchieveFavorToDonate(ns);
         return;
     }
     let playerFactions = player.factions;
@@ -19,6 +20,7 @@ export async function main(ns) {
             && (currentWork.type === WORK_TYPE_CLASS)
         )
         || !(playerFactions.includes(targetFaction))
+        || ns.gang.inGang()
     ) {
         return;
     }
@@ -28,9 +30,57 @@ export async function main(ns) {
             singularity.stopAction();
         }
         return;
-    } else if (currentWork && currentWork.type === WORK_TYPE_FACTION) {
+    }
+
+    workForFaction(ns, targetFaction);
+
+}
+
+/** @param {import(".").NS } ns */
+function tryToAchieveFavorToDonate(ns) {
+    let player = ns.getPlayer();
+    let singularity = ns.singularity;
+    let playerFactions = player.factions;
+    let gangFaction = ns.gang.inGang() ? ns.gang.getGangInformation().faction : false
+    let highestFactionFavor = -1;
+    let factionWithHighestFavor;
+
+    if (!playerFactions.length) {
         return;
     }
+
+    for (let faction of playerFactions) {
+        if (faction === gangFaction) {
+            continue;
+        }
+
+        let factionFavor = singularity.getFactionFavor(faction);
+        if (factionFavor > highestFactionFavor) {
+            highestFactionFavor = factionFavor;
+            factionWithHighestFavor = faction;
+        }
+    }
+
+    if (highestFactionFavor >= ns.getFavorToDonate() || !factionWithHighestFavor) {
+        return;
+    }
+
+    workForFaction(ns, factionWithHighestFavor);
+}
+
+/**
+ * @param {import(".").NS } ns
+ * @param {string} faction
+ */
+function workForFaction(ns, faction) {
+    let player = ns.getPlayer();
+    let singularity = ns.singularity;
+    let currentWork = singularity.getCurrentWork();
+
+    if (currentWork && currentWork.type === WORK_TYPE_FACTION && currentWork.factionName === faction) {
+        return;
+    }
+
 
     let hackStats = player.skills.hacking;
     let securityStats = (player.skills.strength + player.skills.agility + player.skills.defense + player.skills.dexterity) / 4
@@ -54,7 +104,7 @@ export async function main(ns) {
     });
 
     for (let factionWork of factionWorks) {
-        if (singularity.workForFaction(targetFaction, factionWork.type)) {
+        if (singularity.workForFaction(faction, factionWork.type)) {
             break;
         }
     }

@@ -101,7 +101,7 @@ async function getBatchAttacksData(ns) {
 
     let x = 0;
     let maxBatchTime = -1;
-    while (x < 20) {
+    while (x < 5) {
         x++;
         let batchAttackInformation = generateBatchAttackInformation(ns, attackableServers, botnetServerCollection, maxBatchTime);
 

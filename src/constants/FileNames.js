@@ -1,6 +1,7 @@
 export const SCRIPT_PATH_INIT = 'init.js';
 export const SCRIPT_PATH_NETWORK_DISCOVERY = 'utils/networkDiscovery.js';
 export const SCRIPT_PATH_SLEEVE_MANAGER = 'utils/sleeveManager.js';
+export const SCRIPT_PATH_GANG_MANAGER = 'utils/gangManager.js';
 export const SCRIPT_PATH_EARLY_HACK_TEMPLATE = 'eht.js';
 export const SCRIPT_PATH_PURCHASED_SERVER_MANAGER = 'purchased_server_manager.js';
 export const SCRIPT_PATH_KILL_EHT_EVERYWHERE = 'utils/killEhtEverywhere.js';
@@ -28,6 +29,7 @@ export const SCRIPT_PATH_SINGULARITY_DONATE_TO_FACTION = SCRIPT_SINGULARITY_BASE
 //FILE PATHS//
 //////////////
 export const FILE_PATH_TARGET_SERVER = 'targetServer.txt';
+export const FILE_PATH_GANG_POWERS = 'gangPowers.txt';
 
 //STANDARD PROGRAMS//
 /////////////////////

@@ -7,8 +7,7 @@ import {
     LOCATION_ROTHMAN_UNIVERSITY,
     TRAINING_BASE_STAT,
     WORK_TYPE_CLASS,
-    WORK_TYPE_COMPANY,
-    WORK_TYPE_FACTION
+    WORK_TYPE_CRIME
 } from "/constants/Singularity";
 import {SLEEVE_SHOCK_THRESHOLD} from "/settings/Settings";
 
@@ -45,20 +44,20 @@ export async function main(ns) {
             continue;
         }
 
-        if (sleeveNumber === 0) {
-            if (currentWork && currentWork.type === WORK_TYPE_FACTION) {
-                if (!sleeveTask || sleeveTask.type !== currentWork.type || sleeveTask.factionName !== currentWork.factionName || sleeveTask.factionWorkType !== currentWork.factionWorkType) {
-                    sleeve.setToFactionWork(sleeveNumber, currentWork.factionName, currentWork.factionWorkType);
-                }
-                continue;
-            }
-            if (currentWork && currentWork.type === WORK_TYPE_COMPANY) {
-                if (!sleeveTask || sleeveTask.type !== currentWork.type || sleeveTask.companyName !== currentWork.companyName) {
-                    sleeve.setToCompanyWork(sleeveNumber, currentWork.companyName)
-                }
-                continue;
-            }
-        }
+        // if (sleeveNumber === 0) {
+        //     if (currentWork && currentWork.type === WORK_TYPE_FACTION) {
+        //         if (!sleeveTask || sleeveTask.type !== currentWork.type || sleeveTask.factionName !== currentWork.factionName || sleeveTask.factionWorkType !== currentWork.factionWorkType) {
+        //             sleeve.setToFactionWork(sleeveNumber, currentWork.factionName, currentWork.factionWorkType);
+        //         }
+        //         continue;
+        //     }
+        //     if (currentWork && currentWork.type === WORK_TYPE_COMPANY) {
+        //         if (!sleeveTask || sleeveTask.type !== currentWork.type || sleeveTask.companyName !== currentWork.companyName) {
+        //             sleeve.setToCompanyWork(sleeveNumber, currentWork.companyName)
+        //         }
+        //         continue;
+        //     }
+        // }
 
         commitCrime(ns, sleeveNumber);
     }
@@ -125,13 +124,17 @@ function commitCrime(ns, sleeveNumber) {
     let sleeve = ns.sleeve;
     let sleevePerson = sleeve.getSleeve(sleeveNumber);
     let sleeveSkills = sleevePerson.skills;
-
     let averageCombatStats = Math.floor((sleeveSkills.strength + sleeveSkills.defense + sleeveSkills.dexterity + sleeveSkills.agility) / 4);
+    let sleeveTask = sleeve.getTask(sleeveNumber);
 
-    if (averageCombatStats > 75) {
-        sleeve.setToCommitCrime(sleeveNumber, CRIME_HOMICIDE);
+    if (averageCombatStats > 150) {
+        if (!sleeveTask || sleeveTask.type !== WORK_TYPE_CRIME || sleeveTask.crimeType !== CRIME_HOMICIDE) {
+            sleeve.setToCommitCrime(sleeveNumber, CRIME_HOMICIDE);
+        }
     } else {
-        sleeve.setToCommitCrime(sleeveNumber, CRIME_MUG);
+        if (!sleeveTask || sleeveTask.type !== WORK_TYPE_CRIME || sleeveTask.crimeType !== CRIME_MUG) {
+            sleeve.setToCommitCrime(sleeveNumber, CRIME_MUG);
+        }
     }
 
 }

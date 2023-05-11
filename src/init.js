@@ -2,6 +2,7 @@ import {SERVER_NAME_HOME, SERVER_NAME_N00DLES} from "/constants/ServerNames";
 import {
     SCRIPT_PATH_BATCH_HACKING_MANAGER,
     SCRIPT_PATH_EARLY_HACK_TEMPLATE,
+    SCRIPT_PATH_GANG_MANAGER,
     SCRIPT_PATH_HASHNET_MANAGER,
     SCRIPT_PATH_KILL_EHT_EVERYWHERE,
     SCRIPT_PATH_NETWORK_DISCOVERY,
@@ -34,6 +35,9 @@ export async function main(ns) {
         await ns.asleep(TICK);
 
         ns.exec(SCRIPT_PATH_HASHNET_MANAGER, SERVER_NAME_HOME);
+        await ns.asleep(TICK);
+
+        ns.exec(SCRIPT_PATH_GANG_MANAGER, SERVER_NAME_HOME);
         await ns.asleep(TICK);
 
         await initSingularityFunctions(ns);
