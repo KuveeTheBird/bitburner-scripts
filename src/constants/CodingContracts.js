@@ -4,9 +4,11 @@ export const CODING_CONTRACT_SOLVERS = {
     'Find Largest Prime Factor': 'find_largest_prime_factor.js',
     'Subarray with Maximum Sum': 'subarray_with_maximum_sum.js',
     'Total Ways to Sum': 'total_ways_to_sum.js',
+    'Total Ways to Sum II': 'total_ways_to_sum_ii.js',
+    'Spiralize Matrix': 'spiralize_matrix.js',
+    'Array Jumping Game': 'array_jumping_game.js',
 
     'Merge Overlapping Intervals': 'merge_overlapping_intervals.js',
-    'Spiralize Matrix': 'spiralize_matrix.js',
     'Generate IP Addresses': 'generate_ip_addresses.js',
     'Unique Paths in a Grid I': 'unique_paths_in_a_grid_i.js',
     'Unique Paths in a Grid II': 'unique_paths_in_a_grid_ii.js',
