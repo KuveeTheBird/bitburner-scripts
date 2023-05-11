@@ -6,6 +6,7 @@ import {
     ATTACK_TYPE_PREPARE_WEAKEN,
     ATTACK_TYPE_WEAKEN,
     SNIPPET_PATH_GROW,
+    SNIPPET_PATH_SHARE,
     SNIPPET_PATH_WAIT_GROW,
     SNIPPET_PATH_WAIT_HACK,
     SNIPPET_PATH_WAIT_WEAKEN,
@@ -169,6 +170,18 @@ export default class BotnetServerCollection {
         }
 
         return false;
+    }
+
+    startSharing() {
+        for (let serverObject of this.serverObjects) {
+            serverObject.startSharing();
+        }
+    }
+
+    stopSharing() {
+        for (let serverObject of this.serverObjects) {
+            serverObject.killByPath(SNIPPET_PATH_SHARE);
+        }
     }
 
     /**

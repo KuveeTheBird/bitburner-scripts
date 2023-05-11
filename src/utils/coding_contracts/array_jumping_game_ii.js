@@ -3,9 +3,9 @@ import {handleCodingContractReward} from "/utils/functions/handleCodingContractR
 /** @param {NS} ns */
 export async function main(ns) {
     const data = ns.codingcontract.getData(ns.args[1], ns.args[0]);
-    const solution = getSolution(ns, data);
+    const solution = getSolution(data);
 
-    handleCodingContractReward(solution, ns.args[1], ns.args[0]);
+    handleCodingContractReward(ns, solution, ns.args[1], ns.args[0]);
 }
 
 /**

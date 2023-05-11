@@ -1,6 +1,11 @@
 import {calculateThreadCount} from "/utils/functions/calculateThreadCount";
 import * as CONSTANTS from '/constants/BatchAttack';
-import {SNIPPET_PATH_WAIT_GROW, SNIPPET_PATH_WAIT_HACK, SNIPPET_PATH_WAIT_WEAKEN} from '/constants/BatchAttack';
+import {
+    SNIPPET_PATH_SHARE,
+    SNIPPET_PATH_WAIT_GROW,
+    SNIPPET_PATH_WAIT_HACK,
+    SNIPPET_PATH_WAIT_WEAKEN
+} from '/constants/BatchAttack';
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
 import {FILENAME_GRACEFUL_KILL} from "/constants/Misc";
 
@@ -98,12 +103,29 @@ export class BotnetServer {
         return this.exec(scriptPath, threads, attackableServer.name, delay);
     }
 
+    startSharing() {
+        let threadCount = calculateThreadCount(this.availableRam, this.#ns.getScriptRam(SNIPPET_PATH_SHARE));
+
+        if (threadCount > 0) {
+            this.exec(SNIPPET_PATH_SHARE, threadCount);
+        }
+    }
+
     exec(script, numThreads, ...args) {
         return this.#ns.exec(script, this.name, numThreads, ...args, Date.now());
     }
 
     ps() {
         return this.#ns.ps(this.name);
+    }
+
+    killByPath(scriptPath) {
+        let ps = this.ps();
+        for (let process of ps) {
+            if (process.filename === scriptPath) {
+                this.#ns.kill(process.pid, this.name);
+            }
+        }
     }
 
     scp(fileName) {

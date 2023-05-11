@@ -3,7 +3,7 @@ import {gatherBotnetServers} from "/utils/functions/gatherBotnetServers";
 import {generateBatchAttackInformation} from "/utils/functions/generateBatchAttackInformation";
 import {SERVER_NAME_HOME} from "/constants/ServerNames";
 import {TICK} from "/constants/BatchAttack";
-import {FILE_PATH_TARGET_SERVER} from "/constants/FileNames";
+import {FILE_PATH_TARGET_SERVER, SCRIPT_PATH_SOLVE_CODING_CONTRACTS} from "/constants/FileNames";
 import {findCodingContracts} from "/utils/functions/findCodingContracts";
 
 /** @param {NS} ns */
@@ -28,17 +28,7 @@ export async function main(ns) {
             }
         }
 
-        let codingContracts = findCodingContracts(ns);
-
-        if (codingContracts.length) {
-            ns.toast('Will try to solve coding contracts');
-            //START SHARE EVERYWHERE
-
-            //RUN SOLVE CODING CONTRACTS
-            //WAIT UNTIL SOLVE CODING CONTRACTS FINISHES
-
-            //KILL SHARE EVERYWHERE
-        }
+        await handleCodingContracts(ns);
 
         let batchAttacksData = await getBatchAttacksData(ns);
 
@@ -65,6 +55,25 @@ export async function main(ns) {
                 }
             }
         }
+    }
+}
+
+/** @param {NS} ns */
+async function handleCodingContracts(ns) {
+    let codingContracts = findCodingContracts(ns);
+
+    if (codingContracts.length) {
+        let botnetServerCollection = gatherBotnetServers(ns);
+
+        ns.toast('Will try to solve coding contracts');
+        botnetServerCollection.startSharing();
+
+        let pid = ns.exec(SCRIPT_PATH_SOLVE_CODING_CONTRACTS, SERVER_NAME_HOME);
+        while (ns.isRunning(pid, SERVER_NAME_HOME)) {
+            await ns.asleep(1);
+        }
+
+        botnetServerCollection.stopSharing();
     }
 }
 
