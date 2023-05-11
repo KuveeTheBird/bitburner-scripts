@@ -5,6 +5,7 @@
  * @param {string} serverName
  */
 export function handleCodingContractReward(ns, solution, filePath, serverName) {
+    let numTriesRemaining = ns.codingcontract.getNumTriesRemaining(filePath, serverName) - 1;
     let reward = ns.codingcontract.attempt(solution, filePath, serverName);
 
     if (reward.length) {
@@ -17,7 +18,7 @@ export function handleCodingContractReward(ns, solution, filePath, serverName) {
     } else {
         let failureMessage = ns.sprintf(
             'Failed to complete coding contract, remaining tries: %d',
-            ns.codingcontract.getNumTriesRemaining(filePath, serverName)
+            numTriesRemaining
         );
         ns.toast(failureMessage, 'error');
         ns.tprint(failureMessage);

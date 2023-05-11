@@ -7,6 +7,7 @@ export const CODING_CONTRACT_SOLVERS = {
     'Total Ways to Sum II': 'total_ways_to_sum_ii.js',
     'Spiralize Matrix': 'spiralize_matrix.js',
     'Array Jumping Game': 'array_jumping_game.js',
+    'Array Jumping Game II': 'array_jumping_game_ii.js',
 
     'Merge Overlapping Intervals': 'merge_overlapping_intervals.js',
     'Generate IP Addresses': 'generate_ip_addresses.js',
